@@ -79,26 +79,28 @@ const Index = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <Header />
-        
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center mb-12 max-w-4xl mx-auto">
+        <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[80vh]">
+          <div className="flex flex-col items-center mb-10">
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               ReelVault
             </h1>
             <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Save, organize, and discover your favorite Instagram Reels and YouTube Shorts with AI-powered tagging and mood detection
+              Save, organize, and discover your favorite Instagram Reels and YouTube Shorts with <span className="font-semibold text-cyan-300">AI-powered tagging</span> and <span className="font-semibold text-pink-300">mood detection</span>.
             </p>
-            
             <Link to="/auth">
               <Button className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                 ✨ Get Started
               </Button>
             </Link>
           </div>
-          
-          <div className="text-center py-12">
-            <p className="text-gray-400 text-lg sm:text-xl mb-4">Please sign in to start saving your reels</p>
-            <p className="text-gray-500">Create an account to access AI-powered features</p>
+          <div className="flex flex-col items-center text-center mt-2">
+            <p className="text-gray-200 text-xl font-semibold mb-2">Sign in to start saving your reels</p>
+            <p className="text-gray-400 mb-6">Create an account to access all AI-powered features and organize your favorite content.</p>
+            <Link to="/auth">
+              <Button className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 text-white px-8 py-3 text-lg rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 font-bold">
+                Sign In / Sign Up
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -108,19 +110,19 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 flex flex-col">
       <Header />
-      <main className="flex-1 pt-24 pb-12">
+      <main className="flex-1 pt-28 pb-12">
         <div className="container mx-auto px-4">
           {/* Hero Section */}
-          <section className="text-center mb-12">
-            <h1 className="text-5xl sm:text-7xl font-extrabold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
+          <section className="flex flex-col items-center justify-center mt-10 mb-8">
+            <h1 className="text-5xl sm:text-7xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg mb-2 text-center">
               ReelVault
             </h1>
-            <p className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-2xl text-gray-300 mb-6 max-w-2xl text-center font-light">
               The ultimate AI-powered vault for your favorite Instagram Reels and YouTube Shorts.
             </p>
             <Button
               onClick={() => setShowForm(true)}
-              className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 font-bold"
+              className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white px-8 py-4 text-lg rounded-full shadow-xl hover:scale-105 transition font-bold mb-2"
             >
               <Plus className="mr-2 h-6 w-6" />
               Add New Reel
@@ -128,8 +130,8 @@ const Index = () => {
           </section>
 
           {/* Search and Mood Filter Bar */}
-          <section className="max-w-4xl mx-auto mb-10">
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white/10 backdrop-blur-lg rounded-2xl p-4 shadow-lg border border-white/10">
+          <section className="max-w-4xl mx-auto mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white/10 backdrop-blur-xl rounded-2xl p-4 shadow-xl border border-white/10 transition-all">
               <div className="relative w-full sm:w-2/3">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-cyan-400 h-5 w-5" />
                 <Input
@@ -137,7 +139,7 @@ const Index = () => {
                   placeholder="Search reels by description, tags, or notes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 py-3 text-base bg-transparent border-cyan-400/20 text-white placeholder-cyan-200 rounded-xl focus:ring-2 focus:ring-cyan-400/30 focus:border-cyan-400/50"
+                  className="pl-12 py-3 text-base bg-transparent border-cyan-400/20 text-white placeholder-cyan-200 rounded-xl focus:ring-2 focus:ring-cyan-400/30 focus:border-cyan-400/50 transition-all"
                 />
               </div>
               <div className="flex flex-wrap gap-2 justify-center w-full sm:w-1/3">
@@ -176,7 +178,7 @@ const Index = () => {
           {/* Stats Bar */}
           {reels.length > 0 && (
             <section className="max-w-4xl mx-auto mb-8">
-              <div className="flex flex-wrap items-center justify-center gap-6 text-cyan-200 text-base font-medium bg-white/10 backdrop-blur-lg rounded-xl p-4 shadow border border-white/10">
+              <div className="flex flex-wrap items-center justify-center gap-6 text-cyan-200 text-base font-medium bg-white/10 backdrop-blur-xl rounded-2xl p-4 shadow-xl border border-white/10 transition-all">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5" />
                   <span>{reels.length} Total Reels</span>
@@ -198,79 +200,50 @@ const Index = () => {
             <section className="max-w-4xl mx-auto mb-10">
               <div className="flex items-center gap-2 mb-4">
                 <Clock className="h-5 w-5 text-cyan-400" />
-                <h2 className="text-xl font-semibold text-white">Recently Viewed</h2>
+                <span className="text-cyan-200 font-semibold">Recently Viewed</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {recentlyViewed.map((reel) => (
-                  <div key={reel.id} className="bg-white/10 backdrop-blur-md border border-cyan-400/10 rounded-xl p-4 shadow">
-                    <p className="text-white text-sm font-semibold mb-2 line-clamp-2">{reel.description}</p>
-                    <div className="flex items-center justify-between text-cyan-200 text-xs">
-                      <span>Views: {reel.view_count || 0}</span>
-                      <span>{new Date(reel.last_viewed!).toLocaleDateString()}</span>
-                    </div>
-                  </div>
+                  <ReelCard
+                    key={reel.id}
+                    reel={reel}
+                    onToggleLike={toggleLike}
+                    onDelete={deleteReel}
+                    onView={incrementViewCount}
+                    onUpdateNotes={updateNotes}
+                    searchTerm={searchTerm}
+                    className="transition-transform duration-200 hover:scale-[1.03] hover:shadow-2xl rounded-2xl"
+                  />
                 ))}
               </div>
             </section>
           )}
 
-          {/* Add Reel Form */}
-          {showForm && (
-            <ReelForm
-              onSubmit={handleAddReel}
-              onCancel={() => setShowForm(false)}
-              suggestTags={suggestTags}
-              detectMood={detectMood}
-            />
-          )}
-
-          {/* Loading State */}
-          {reelsLoading && (
-            <div className="text-center py-12">
-              <p className="text-cyan-200 text-xl">Loading your reels...</p>
-            </div>
-          )}
-
-          {/* Empty States */}
-          {!reelsLoading && filteredReels.length === 0 && searchTerm && (
-            <div className="text-center py-12">
-              <p className="text-cyan-200 text-xl">No reels found matching "{searchTerm}"</p>
-            </div>
-          )}
-
-          {!reelsLoading && filteredReels.length === 0 && selectedMood && (
-            <div className="text-center py-12">
-              <p className="text-cyan-200 text-xl">No reels found with "{selectedMood}" mood</p>
-            </div>
-          )}
-
-          {!reelsLoading && filteredReels.length === 0 && !searchTerm && !selectedMood && !showForm && (
-            <div className="text-center py-12">
-              <p className="text-cyan-200 text-xl mb-4">Your ReelVault is empty</p>
-              <p className="text-cyan-400">Start by adding your first reel with AI-powered features!</p>
-            </div>
-          )}
-
-          {/* Reels Grid */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {/* Reel Cards */}
+          <section className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
             {filteredReels.map((reel) => (
               <ReelCard
                 key={reel.id}
-                reel={{
-                  ...reel,
-                  dateSaved: reel.date_saved,
-                  isLiked: reel.is_liked
-                }}
+                reel={reel}
                 onToggleLike={toggleLike}
                 onDelete={deleteReel}
                 onView={incrementViewCount}
                 onUpdateNotes={updateNotes}
                 searchTerm={searchTerm}
+                className="transition-transform duration-200 hover:scale-[1.03] hover:shadow-2xl rounded-2xl"
               />
             ))}
           </section>
         </div>
       </main>
+      {showForm && (
+        <ReelForm
+          onSubmit={handleAddReel}
+          onCancel={() => setShowForm(false)}
+          suggestTags={suggestTags}
+          detectMood={detectMood}
+        />
+      )}
     </div>
   );
 };

@@ -14,6 +14,7 @@ interface ReelCardProps {
   onView: (id: string) => void;
   onUpdateNotes: (id: string, notes: string) => void;
   searchTerm: string;
+  className?: string;
 }
 
 const ReelCard: React.FC<ReelCardProps> = ({ 
@@ -22,7 +23,8 @@ const ReelCard: React.FC<ReelCardProps> = ({
   onDelete, 
   onView, 
   onUpdateNotes, 
-  searchTerm 
+  searchTerm, 
+  className 
 }) => {
   const [showNotes, setShowNotes] = useState(false);
   const [notesText, setNotesText] = useState(reel.notes || '');
@@ -118,7 +120,7 @@ const ReelCard: React.FC<ReelCardProps> = ({
   });
 
   return (
-    <Card className="bg-gradient-to-br from-slate-900/80 to-purple-950/80 border border-white/10 shadow-2xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl group">
+    <Card className={`bg-gradient-to-br from-slate-900/80 to-purple-950/80 border border-white/10 shadow-2xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl group ${className || ''}`.trim()}>
       <CardContent className="p-0">
         {/* Video Preview */}
         <div className="aspect-video bg-gradient-to-br from-purple-900/40 to-pink-900/40 relative overflow-hidden">

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { X, Link as LinkIcon, Sparkles, Brain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -240,9 +239,8 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
               </Button>
               <Button
                 type="button"
-                variant="outline"
                 onClick={onCancel}
-                className="border-white/20 text-white hover:bg-white/10 rounded-xl py-2.5"
+                className="bg-black text-white rounded-xl py-2.5 hover:bg-neutral-900 transition-all duration-200"
               >
                 Cancel
               </Button>

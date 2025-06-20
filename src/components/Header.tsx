@@ -17,11 +17,6 @@ const Header = () => {
           <span className="text-white font-extrabold text-2xl tracking-tight bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:brightness-125 transition-all">ReelVault</span>
         </Link>
         <nav className="flex items-center space-x-6">
-          <a href="#features" className="text-gray-200 hover:text-white font-medium transition-colors">Features</a>
-          <a href="#about" className="text-gray-200 hover:text-white font-medium transition-colors">About</a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-200 hover:text-white transition-colors">
-            <Github className="h-5 w-5" />
-          </a>
           {user ? (
             <div className="flex items-center space-x-4 ml-4">
               <div className="flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-lg">
@@ -40,9 +35,8 @@ const Header = () => {
           ) : (
             <Link to="/auth">
               <Button
-                variant="outline"
                 size="sm"
-                className="border-cyan-400/30 text-cyan-200 hover:bg-cyan-500/10 rounded-full px-5 py-1 font-semibold shadow-sm"
+                className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white rounded-full px-6 py-2 font-semibold shadow-lg hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-300 border-0"
               >
                 Sign In
               </Button>
