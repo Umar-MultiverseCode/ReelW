@@ -19,9 +19,11 @@ const Header = () => {
         <nav className="flex items-center space-x-6">
           {user ? (
             <div className="flex items-center space-x-4 ml-4">
-              <div className="flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-lg">
+              <div className="flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-lg max-w-[120px] sm:max-w-xs overflow-hidden">
                 <User className="h-4 w-4 text-cyan-300" />
-                <span className="text-cyan-100 text-sm font-semibold">{user.email}</span>
+                <span className="text-cyan-100 text-sm font-semibold truncate block max-w-[80px] sm:max-w-xs">
+                  {user.email.length > 18 ? `${user.email.slice(0, 6)}...${user.email.slice(user.email.indexOf('@'))}` : user.email}
+                </span>
               </div>
               <Button
                 onClick={signOut}
