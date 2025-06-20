@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Heart, Copy, Trash2, Calendar, Tag, Eye, StickyNote, Brain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -119,29 +118,29 @@ const ReelCard: React.FC<ReelCardProps> = ({
   });
 
   return (
-    <Card className="bg-black/30 backdrop-blur-xl border border-white/10 overflow-hidden hover:bg-black/40 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/10 group">
+    <Card className="bg-gradient-to-br from-slate-900/80 to-purple-950/80 border border-white/10 shadow-2xl rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl group">
       <CardContent className="p-0">
         {/* Video Preview */}
-        <div className="aspect-video bg-gradient-to-br from-purple-900/20 to-pink-900/20 relative overflow-hidden">
+        <div className="aspect-video bg-gradient-to-br from-purple-900/40 to-pink-900/40 relative overflow-hidden">
           {embedUrl ? (
             <iframe
               src={embedUrl}
-              className="w-full h-full"
+              className="w-full h-full rounded-t-2xl"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               onLoad={handleView}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-600/20 to-pink-600/20">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-600/30 to-pink-600/30">
               <p className="text-white text-center p-4 text-sm">Video Preview Not Available</p>
             </div>
           )}
-          
+
           {/* Overlay Controls */}
-          <div className="absolute top-3 right-3 flex gap-2">
+          <div className="absolute top-3 right-3 flex gap-2 z-10">
             {reel.mood && (
-              <Badge className={`${getMoodColor(reel.mood)} border text-xs font-medium`}>
+              <Badge className={`shadow-md ${getMoodColor(reel.mood)} border text-xs font-semibold px-3 py-1`}> 
                 <Brain className="h-3 w-3 mr-1" />
                 {getMoodEmoji(reel.mood)} {reel.mood}
               </Badge>
@@ -150,9 +149,8 @@ const ReelCard: React.FC<ReelCardProps> = ({
               variant="ghost"
               size="icon"
               onClick={() => onToggleLike(reel.id)}
-              className={`${
-                reel.is_liked ? 'text-red-400 bg-red-500/20' : 'text-white bg-black/30'
-              } hover:text-red-400 hover:bg-red-500/20 backdrop-blur-sm rounded-full transition-all duration-200`}
+              className={`transition-all duration-200 shadow-md border-2 border-transparent ${reel.is_liked ? 'text-red-400 bg-red-500/20 border-red-400' : 'text-white bg-black/30'} hover:text-red-400 hover:bg-red-500/20 hover:border-red-400 focus:ring-2 focus:ring-red-400`}
+              aria-label="Like"
             >
               <Heart className={`h-4 w-4 ${reel.is_liked ? 'fill-current' : ''}`} />
             </Button>
@@ -160,45 +158,45 @@ const ReelCard: React.FC<ReelCardProps> = ({
 
           {/* View Count */}
           {reel.view_count && reel.view_count > 0 && (
-            <div className="absolute bottom-3 left-3 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
-              <Eye className="h-3 w-3 text-gray-300" />
-              <span className="text-xs text-gray-300">{reel.view_count}</span>
+            <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 shadow-md">
+              <Eye className="h-3 w-3 text-cyan-300" />
+              <span className="text-xs text-cyan-200 font-semibold">{reel.view_count}</span>
             </div>
           )}
         </div>
 
         {/* Content */}
-        <div className="p-3 sm:p-4 space-y-3">
+        <div className="p-4 space-y-4 bg-white/10 backdrop-blur-lg rounded-b-2xl">
           {/* Description */}
-          <p className="text-white text-sm leading-relaxed">
+          <p className="text-white text-base leading-relaxed font-semibold min-h-[40px]">
             {highlightText(reel.description, searchTerm)}
           </p>
 
           {/* Tags */}
           {reel.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {reel.tags.map((tag, index) => (
                 <Badge
                   key={index}
                   variant="secondary"
-                  className="bg-gradient-to-r from-cyan-600/20 to-purple-600/20 text-cyan-300 hover:from-cyan-600/30 hover:to-purple-600/30 text-xs border border-cyan-500/20"
+                  className="flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-cyan-400/30 via-purple-400/30 to-pink-400/30 border border-cyan-300/30 shadow-md text-cyan-100 font-semibold text-xs backdrop-blur-md hover:from-cyan-500/40 hover:to-pink-500/40 transition-all duration-200"
                 >
-                  <Tag className="h-3 w-3 mr-1" />
-                  {highlightText(tag, searchTerm)}
+                  <Tag className="h-3 w-3 mr-1 text-cyan-200" />
+                  <span className="drop-shadow-sm">{highlightText(tag, searchTerm)}</span>
                 </Badge>
               ))}
             </div>
           )}
 
           {/* Notes Preview */}
-          {reel.notes && (
-            <div className="bg-white/5 border border-white/10 rounded-lg p-2">
-              <p className="text-gray-300 text-xs line-clamp-2">{reel.notes}</p>
+          {reel.notes && !showNotes && (
+            <div className="bg-white/10 border border-white/10 rounded-lg p-3">
+              <p className="text-cyan-100 text-xs line-clamp-2">{reel.notes}</p>
             </div>
           )}
 
           {/* Date and Last Viewed */}
-          <div className="flex items-center justify-between text-gray-400 text-xs">
+          <div className="flex items-center justify-between text-cyan-200 text-xs">
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
               <span>Saved {formattedDate}</span>
@@ -212,32 +210,38 @@ const ReelCard: React.FC<ReelCardProps> = ({
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-2 pt-2">
+          <div className="flex flex-wrap gap-3 pt-2">
             <Button
               variant="outline"
               size="sm"
               onClick={copyToClipboard}
-              className="flex-1 min-w-0 border-white/20 text-white hover:bg-white/10 text-xs rounded-lg"
+              className="flex-1 min-w-0 bg-gradient-to-r from-cyan-500 to-blue-600 border-0 text-white font-bold shadow-lg text-xs rounded-lg transition-all duration-200 hover:from-cyan-600 hover:to-blue-700 focus:from-cyan-700 focus:to-blue-800 focus:ring-2 focus:ring-cyan-400/60"
+              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.18)' }}
+              aria-label="Copy Link"
             >
-              <Copy className="h-3 w-3 mr-1" />
+              <Copy className="h-3 w-3 mr-1 text-white" />
               Copy
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => setShowNotes(!showNotes)}
-              className="border-cyan-400/30 text-cyan-400 hover:bg-cyan-500/10 text-xs rounded-lg"
+              className="flex-1 min-w-0 bg-gradient-to-r from-purple-500 to-pink-600 border-0 text-white font-bold shadow-lg text-xs rounded-lg transition-all duration-200 hover:from-purple-600 hover:to-pink-700 focus:from-purple-700 focus:to-pink-800 focus:ring-2 focus:ring-pink-400/60"
+              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.18)' }}
+              aria-label="Notes"
             >
-              <StickyNote className="h-3 w-3 mr-1" />
+              <StickyNote className="h-3 w-3 mr-1 text-white" />
               Notes
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => onDelete(reel.id)}
-              className="border-red-400/30 text-red-400 hover:bg-red-500/10 text-xs rounded-lg"
+              className="flex-1 min-w-0 bg-gradient-to-r from-red-500 to-pink-500 border-0 text-white font-bold shadow-lg text-xs rounded-lg transition-all duration-200 hover:from-red-600 hover:to-pink-600 focus:from-red-700 focus:to-pink-700 focus:ring-2 focus:ring-red-400/60"
+              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.18)' }}
+              aria-label="Delete"
             >
-              <Trash2 className="h-3 w-3" />
+              <Trash2 className="h-3 w-3 text-white" />
             </Button>
           </div>
 
@@ -248,13 +252,13 @@ const ReelCard: React.FC<ReelCardProps> = ({
                 value={notesText}
                 onChange={(e) => setNotesText(e.target.value)}
                 placeholder="Add your thoughts, reminders, or notes..."
-                className="bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs rounded-lg min-h-16 resize-none"
+                className="bg-white/10 border border-cyan-400/20 text-white placeholder-gray-400 text-xs rounded-lg min-h-16 resize-none focus:ring-2 focus:ring-cyan-400/40"
               />
               <div className="flex gap-2">
                 <Button
                   size="sm"
                   onClick={handleNotesUpdate}
-                  className="bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700 text-white text-xs rounded-lg"
+                  className="flex-1 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700 text-white text-xs rounded-lg font-semibold shadow-md"
                 >
                   Save Notes
                 </Button>
@@ -262,7 +266,7 @@ const ReelCard: React.FC<ReelCardProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => setShowNotes(false)}
-                  className="border-white/20 text-white hover:bg-white/10 text-xs rounded-lg"
+                  className="flex-1 border-gray-400/30 text-gray-300 hover:bg-gray-500/10 text-xs rounded-lg font-semibold"
                 >
                   Cancel
                 </Button>
