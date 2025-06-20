@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,6 +10,10 @@ export interface Reel {
   tags: string[];
   date_saved: string;
   is_liked: boolean;
+  mood?: string;
+  view_count?: number;
+  last_viewed?: string;
+  notes?: string;
 }
 
 export const useReels = () => {
@@ -18,6 +21,60 @@ export const useReels = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
+
+  const suggestTags = (description: string): string[] => {
+    const keywords = description.toLowerCase();
+    const suggestions: string[] = [];
+    
+    // Smart tag suggestions based on common patterns
+    const tagMappings = {
+      'cook': ['cooking', 'recipe'],
+      'food': ['food', 'recipe'],
+      'dance': ['dance', 'music'],
+      'workout': ['fitness', 'health'],
+      'travel': ['travel', 'explore'],
+      'makeup': ['beauty', 'tutorial'],
+      'funny': ['comedy', 'humor'],
+      'motivat': ['motivation', 'inspire'],
+      'learn': ['education', 'tips'],
+      'art': ['creative', 'design'],
+      'music': ['music', 'audio'],
+      'tech': ['technology', 'gadgets'],
+      'fashion': ['style', 'outfit'],
+      'pet': ['animals', 'cute'],
+      'nature': ['outdoors', 'scenic']
+    };
+
+    Object.entries(tagMappings).forEach(([key, tags]) => {
+      if (keywords.includes(key)) {
+        suggestions.push(...tags);
+      }
+    });
+
+    return [...new Set(suggestions)].slice(0, 5);
+  };
+
+  const detectMood = (description: string, tags: string[]): string => {
+    const text = `${description} ${tags.join(' ')}`.toLowerCase();
+    
+    const moodKeywords = {
+      'Funny': ['funny', 'comedy', 'humor', 'laugh', 'joke', 'hilarious', 'meme'],
+      'Motivational': ['motivat', 'inspire', 'success', 'achieve', 'goal', 'dream', 'power'],
+      'Educational': ['learn', 'tutorial', 'how to', 'tips', 'guide', 'explain', 'teach'],
+      'Calm': ['relax', 'peaceful', 'meditation', 'calm', 'zen', 'nature', 'quiet'],
+      'Emotional': ['emotional', 'touching', 'heart', 'sad', 'cry', 'love', 'feel'],
+      'Creative': ['art', 'creative', 'design', 'craft', 'draw', 'paint', 'music'],
+      'Energetic': ['energy', 'dance', 'workout', 'fitness', 'active', 'sport', 'pump']
+    };
+
+    for (const [mood, keywords] of Object.entries(moodKeywords)) {
+      if (keywords.some(keyword => text.includes(keyword))) {
+        return mood;
+      }
+    }
+
+    return 'Creative'; // Default mood
+  };
 
   const fetchReels = async () => {
     if (!user) {
@@ -40,7 +97,11 @@ export const useReels = () => {
         description: reel.description,
         tags: reel.tags || [],
         date_saved: reel.date_saved,
-        is_liked: reel.is_liked
+        is_liked: reel.is_liked,
+        mood: reel.mood || detectMood(reel.description, reel.tags || []),
+        view_count: reel.view_count || 0,
+        last_viewed: reel.last_viewed,
+        notes: reel.notes || ''
       }));
 
       setReels(formattedReels);
@@ -56,8 +117,11 @@ export const useReels = () => {
     }
   };
 
-  const addReel = async (newReel: Omit<Reel, 'id' | 'date_saved' | 'is_liked'>) => {
+  const addReel = async (newReel: Omit<Reel, 'id' | 'date_saved' | 'is_liked' | 'mood' | 'view_count' | 'last_viewed'>) => {
     if (!user) return;
+
+    const suggestedTags = newReel.tags.length === 0 ? suggestTags(newReel.description) : newReel.tags;
+    const mood = detectMood(newReel.description, suggestedTags);
 
     try {
       const { data, error } = await supabase
@@ -66,8 +130,11 @@ export const useReels = () => {
           user_id: user.id,
           url: newReel.url,
           description: newReel.description,
-          tags: newReel.tags,
-          is_liked: false
+          tags: suggestedTags,
+          is_liked: false,
+          mood: mood,
+          view_count: 0,
+          notes: newReel.notes || ''
         }])
         .select()
         .single();
@@ -80,14 +147,18 @@ export const useReels = () => {
         description: data.description,
         tags: data.tags || [],
         date_saved: data.date_saved,
-        is_liked: data.is_liked
+        is_liked: data.is_liked,
+        mood: data.mood,
+        view_count: data.view_count || 0,
+        last_viewed: data.last_viewed,
+        notes: data.notes || ''
       };
 
       setReels(prev => [formattedReel, ...prev]);
       
       toast({
         title: "Reel saved successfully!",
-        description: "Your reel has been added to ReelVault.",
+        description: `Mood detected: ${mood}. Tags suggested: ${suggestedTags.join(', ')}`,
       });
     } catch (error) {
       console.error('Error adding reel:', error);
@@ -153,6 +224,61 @@ export const useReels = () => {
     }
   };
 
+  const incrementViewCount = async (id: string) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('reels')
+        .update({ 
+          view_count: supabase.raw('view_count + 1'),
+          last_viewed: new Date().toISOString()
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setReels(prev => prev.map(r => 
+        r.id === id ? { 
+          ...r, 
+          view_count: (r.view_count || 0) + 1,
+          last_viewed: new Date().toISOString()
+        } : r
+      ));
+    } catch (error) {
+      console.error('Error updating view count:', error);
+    }
+  };
+
+  const updateNotes = async (id: string, notes: string) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('reels')
+        .update({ notes })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setReels(prev => prev.map(r => 
+        r.id === id ? { ...r, notes } : r
+      ));
+      
+      toast({
+        title: "Notes updated",
+        description: "Your notes have been saved.",
+      });
+    } catch (error) {
+      console.error('Error updating notes:', error);
+      toast({
+        title: "Error updating notes",
+        description: "Could not save your notes.",
+        variant: "destructive"
+      });
+    }
+  };
+
   useEffect(() => {
     fetchReels();
   }, [user]);
@@ -163,6 +289,10 @@ export const useReels = () => {
     addReel,
     toggleLike,
     deleteReel,
+    incrementViewCount,
+    updateNotes,
+    suggestTags,
+    detectMood,
     refetch: fetchReels
   };
 };
