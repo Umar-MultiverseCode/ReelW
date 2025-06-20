@@ -6,33 +6,16 @@ import { Input } from '@/components/ui/input';
 import ReelForm from '@/components/ReelForm';
 import ReelCard from '@/components/ReelCard';
 import Header from '@/components/Header';
-import { useToast } from '@/hooks/use-toast';
-
-export interface Reel {
-  id: string;
-  url: string;
-  description: string;
-  tags: string[];
-  dateSaved: string;
-  isLiked: boolean;
-}
+import { useAuth } from '@/contexts/AuthContext';
+import { useReels } from '@/hooks/useReels';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
-  const [reels, setReels] = useState<Reel[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [filteredReels, setFilteredReels] = useState<Reel[]>([]);
-  const { toast } = useToast();
-
-  // Load reels from localStorage on component mount
-  useEffect(() => {
-    const savedReels = localStorage.getItem('reelVaultData');
-    if (savedReels) {
-      const parsedReels = JSON.parse(savedReels);
-      setReels(parsedReels);
-      setFilteredReels(parsedReels);
-    }
-  }, []);
+  const [filteredReels, setFilteredReels] = useState<any[]>([]);
+  const { user, loading: authLoading } = useAuth();
+  const { reels, loading: reelsLoading, addReel, toggleLike, deleteReel } = useReels();
 
   // Filter reels based on search term
   useEffect(() => {
@@ -47,43 +30,48 @@ const Index = () => {
     }
   }, [searchTerm, reels]);
 
-  const handleAddReel = (newReel: Omit<Reel, 'id' | 'dateSaved' | 'isLiked'>) => {
-    const reel: Reel = {
-      ...newReel,
-      id: Date.now().toString(),
-      dateSaved: new Date().toISOString(),
-      isLiked: false,
-    };
-
-    const updatedReels = [reel, ...reels];
-    setReels(updatedReels);
-    localStorage.setItem('reelVaultData', JSON.stringify(updatedReels));
+  const handleAddReel = async (newReel: { url: string; description: string; tags: string[] }) => {
+    await addReel(newReel);
     setShowForm(false);
-    
-    toast({
-      title: "Reel saved successfully!",
-      description: "Your reel has been added to ReelVault.",
-    });
   };
 
-  const handleToggleLike = (id: string) => {
-    const updatedReels = reels.map(reel =>
-      reel.id === id ? { ...reel, isLiked: !reel.isLiked } : reel
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
     );
-    setReels(updatedReels);
-    localStorage.setItem('reelVaultData', JSON.stringify(updatedReels));
-  };
+  }
 
-  const handleDeleteReel = (id: string) => {
-    const updatedReels = reels.filter(reel => reel.id !== id);
-    setReels(updatedReels);
-    localStorage.setItem('reelVaultData', JSON.stringify(updatedReels));
-    
-    toast({
-      title: "Reel deleted",
-      description: "The reel has been removed from your vault.",
-    });
-  };
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <Header />
+        
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center mb-12">
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              ReelVault
+            </h1>
+            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+              Save, organize, and discover your favorite Instagram Reels and YouTube Shorts in one beautiful place
+            </p>
+            
+            <Link to="/auth">
+              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                Get Started
+              </Button>
+            </Link>
+          </div>
+          
+          <div className="text-center py-12">
+            <p className="text-gray-400 text-xl mb-4">Please sign in to start saving your reels</p>
+            <p className="text-gray-500">Create an account to access all features</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
@@ -130,14 +118,21 @@ const Index = () => {
           />
         )}
 
+        {/* Loading State */}
+        {reelsLoading && (
+          <div className="text-center py-12">
+            <p className="text-gray-400 text-xl">Loading your reels...</p>
+          </div>
+        )}
+
         {/* Reels Grid */}
-        {filteredReels.length === 0 && searchTerm && (
+        {!reelsLoading && filteredReels.length === 0 && searchTerm && (
           <div className="text-center py-12">
             <p className="text-gray-400 text-xl">No reels found matching "{searchTerm}"</p>
           </div>
         )}
 
-        {filteredReels.length === 0 && !searchTerm && !showForm && (
+        {!reelsLoading && filteredReels.length === 0 && !searchTerm && !showForm && (
           <div className="text-center py-12">
             <p className="text-gray-400 text-xl mb-4">Your ReelVault is empty</p>
             <p className="text-gray-500">Start by adding your first reel!</p>
@@ -148,9 +143,13 @@ const Index = () => {
           {filteredReels.map((reel) => (
             <ReelCard
               key={reel.id}
-              reel={reel}
-              onToggleLike={handleToggleLike}
-              onDelete={handleDeleteReel}
+              reel={{
+                ...reel,
+                dateSaved: reel.date_saved,
+                isLiked: reel.is_liked
+              }}
+              onToggleLike={toggleLike}
+              onDelete={deleteReel}
               searchTerm={searchTerm}
             />
           ))}
