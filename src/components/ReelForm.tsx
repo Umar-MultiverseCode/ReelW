@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 
 interface ReelFormProps {
-  onSubmit: (reel: { url: string; description: string; tags: string[]; notes?: string }) => void;
+  onSubmit: (reel: { url: string; description: string; tags: string[]; notes?: string; is_public: boolean }) => void;
   onCancel: () => void;
   suggestTags: (description: string) => string[];
   detectMood: (description: string, tags: string[]) => string;
@@ -22,6 +22,7 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
   const [notes, setNotes] = useState('');
   const [suggestedTags, setSuggestedTags] = useState<string[]>([]);
   const [detectedMood, setDetectedMood] = useState<string>('');
+  const [isPublic, setIsPublic] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -115,7 +116,8 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
       url: url.trim(),
       description: description.trim(),
       tags: tagArray,
-      notes: notes.trim()
+      notes: notes.trim(),
+      is_public: isPublic
     });
 
     setIsLoading(false);
@@ -226,6 +228,20 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
                 onChange={(e) => setNotes(e.target.value)}
                 className="bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/20 rounded-xl min-h-16 resize-none"
               />
+            </div>
+
+            {/* Public/Private Toggle */}
+            <div className="flex items-center gap-3">
+              <input
+                id="isPublic"
+                type="checkbox"
+                checked={isPublic}
+                onChange={() => setIsPublic((v) => !v)}
+                className="w-5 h-5 accent-cyan-500 rounded focus:ring-2 focus:ring-cyan-400"
+              />
+              <label htmlFor="isPublic" className="text-sm font-medium text-cyan-300 select-none cursor-pointer">
+                Make this reel public
+              </label>
             </div>
 
             {/* Submit Buttons */}

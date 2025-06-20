@@ -80,7 +80,7 @@ const ReelCard: React.FC<ReelCardProps> = ({
 
     const youtubeMatch = url.match(/(?:youtube\.com\/shorts\/|youtu\.be\/)([A-Za-z0-9_-]+)/);
     if (youtubeMatch) {
-      return `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+      return `https://www.youtube.com/embed/${youtubeMatch[1]}?controls=0&showinfo=0&modestbranding=1`;
     }
 
     return null;
@@ -124,6 +124,16 @@ const ReelCard: React.FC<ReelCardProps> = ({
       <CardContent className="p-0">
         {/* Video Preview */}
         <div className="aspect-video bg-gradient-to-br from-purple-900/40 to-pink-900/40 relative overflow-hidden">
+          {/* Top badges row */}
+          <div className="absolute top-4 left-4 z-20 flex gap-2 items-center">
+            <Badge className={`px-3 py-1 text-xs font-bold uppercase tracking-wide shadow-lg border-2 rounded-lg ${reel.is_public ? 'bg-green-600 text-white border-green-700' : 'bg-gray-800 text-gray-100 border-gray-600'}`}>{reel.is_public ? 'Private' : 'Private'}</Badge>
+            {reel.mood && (
+              <Badge className="px-3 py-1 text-xs font-bold uppercase tracking-wide shadow-lg border-2 rounded-lg bg-blue-700 text-white border-blue-300 flex items-center gap-1">
+                <Brain className="h-3 w-3 mr-1" />
+                {getMoodEmoji(reel.mood)} {reel.mood}
+              </Badge>
+            )}
+          </div>
           {embedUrl ? (
             <iframe
               src={embedUrl}
@@ -140,12 +150,18 @@ const ReelCard: React.FC<ReelCardProps> = ({
           )}
 
           {/* Overlay Controls */}
-          <div className="absolute top-3 right-3 flex gap-2 z-10">
-            {reel.mood && (
-              <Badge className={`shadow-md ${getMoodColor(reel.mood)} border text-xs font-semibold px-3 py-1`}> 
-                <Brain className="h-3 w-3 mr-1" />
-                {getMoodEmoji(reel.mood)} {reel.mood}
-              </Badge>
+          <div className="absolute top-3 right-3 flex gap-2 z-10 items-center">
+            {/* Share Button (if public) */}
+            {reel.is_public && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {navigator.clipboard.writeText(window.location.origin + '/public/' + reel.id)}}
+                className="text-cyan-300 hover:text-cyan-400 bg-black/30 hover:bg-cyan-900/20 border-2 border-transparent shadow-md"
+                aria-label="Copy Public Link"
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
             )}
             <Button
               variant="ghost"
@@ -168,7 +184,7 @@ const ReelCard: React.FC<ReelCardProps> = ({
         </div>
 
         {/* Content */}
-        <div className="p-4 space-y-4 bg-white/10 backdrop-blur-lg rounded-b-2xl">
+        <div className="p-5 space-y-4 bg-white/10 backdrop-blur-lg rounded-b-2xl">
           {/* Description */}
           <p className="text-white text-base leading-relaxed font-semibold min-h-[40px]">
             {highlightText(reel.description, searchTerm)}
@@ -180,10 +196,9 @@ const ReelCard: React.FC<ReelCardProps> = ({
               {reel.tags.map((tag, index) => (
                 <Badge
                   key={index}
-                  variant="secondary"
-                  className="flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-cyan-400/30 via-purple-400/30 to-pink-400/30 border border-cyan-300/30 shadow-md text-cyan-100 font-semibold text-xs backdrop-blur-md hover:from-cyan-500/40 hover:to-pink-500/40 transition-all duration-200"
+                  className="flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-600 text-white font-bold text-xs shadow-md border-0"
                 >
-                  <Tag className="h-3 w-3 mr-1 text-cyan-200" />
+                  <Tag className="h-3 w-3 mr-1 text-white" />
                   <span className="drop-shadow-sm">{highlightText(tag, searchTerm)}</span>
                 </Badge>
               ))}
@@ -212,38 +227,32 @@ const ReelCard: React.FC<ReelCardProps> = ({
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-wrap gap-2 pt-2">
             <Button
-              variant="outline"
               size="sm"
               onClick={copyToClipboard}
-              className="flex-1 min-w-0 bg-gradient-to-r from-cyan-500 to-blue-600 border-0 text-white font-bold shadow-lg text-xs rounded-lg transition-all duration-200 hover:from-cyan-600 hover:to-blue-700 focus:from-cyan-700 focus:to-blue-800 focus:ring-2 focus:ring-cyan-400/60"
-              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.18)' }}
+              className="flex-1 min-w-0 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-md text-xs rounded-full py-1.5 px-4 transition-all duration-200 flex items-center gap-1"
               aria-label="Copy Link"
             >
-              <Copy className="h-3 w-3 mr-1 text-white" />
-              Copy
+              <Copy className="h-4 w-4 text-white" />
+              <span>Copy</span>
             </Button>
             <Button
-              variant="outline"
               size="sm"
               onClick={() => setShowNotes(!showNotes)}
-              className="flex-1 min-w-0 bg-gradient-to-r from-purple-500 to-pink-600 border-0 text-white font-bold shadow-lg text-xs rounded-lg transition-all duration-200 hover:from-purple-600 hover:to-pink-700 focus:from-purple-700 focus:to-pink-800 focus:ring-2 focus:ring-pink-400/60"
-              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.18)' }}
+              className="flex-1 min-w-0 bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md text-xs rounded-full py-1.5 px-4 transition-all duration-200 flex items-center gap-1"
               aria-label="Notes"
             >
-              <StickyNote className="h-3 w-3 mr-1 text-white" />
-              Notes
+              <StickyNote className="h-4 w-4 text-white" />
+              <span>Notes</span>
             </Button>
             <Button
-              variant="outline"
               size="sm"
               onClick={() => onDelete(reel.id)}
-              className="flex-1 min-w-0 bg-gradient-to-r from-red-500 to-pink-500 border-0 text-white font-bold shadow-lg text-xs rounded-lg transition-all duration-200 hover:from-red-600 hover:to-pink-600 focus:from-red-700 focus:to-pink-700 focus:ring-2 focus:ring-red-400/60"
-              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.18)' }}
+              className="flex-1 min-w-0 bg-red-600 hover:bg-red-700 text-white font-medium shadow-md text-xs rounded-full py-1.5 px-4 transition-all duration-200 flex items-center gap-1"
               aria-label="Delete"
             >
-              <Trash2 className="h-3 w-3 text-white" />
+              <Trash2 className="h-4 w-4 text-white" />
             </Button>
           </div>
 

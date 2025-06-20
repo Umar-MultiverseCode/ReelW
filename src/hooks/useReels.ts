@@ -14,6 +14,7 @@ export interface Reel {
   view_count?: number;
   last_viewed?: string;
   notes?: string;
+  is_public: boolean;
 }
 
 export const useReels = () => {
@@ -101,7 +102,8 @@ export const useReels = () => {
         mood: reel.mood || detectMood(reel.description, reel.tags || []),
         view_count: reel.view_count || 0,
         last_viewed: reel.last_viewed,
-        notes: reel.notes || ''
+        notes: reel.notes || '',
+        is_public: reel.is_public ?? false
       }));
 
       setReels(formattedReels);
@@ -117,7 +119,7 @@ export const useReels = () => {
     }
   };
 
-  const addReel = async (newReel: Omit<Reel, 'id' | 'date_saved' | 'is_liked' | 'mood' | 'view_count' | 'last_viewed'>) => {
+  const addReel = async (newReel: Omit<Reel, 'id' | 'date_saved' | 'is_liked' | 'mood' | 'view_count' | 'last_viewed'> & { is_public: boolean }) => {
     if (!user) return;
 
     const suggestedTags = newReel.tags.length === 0 ? suggestTags(newReel.description) : newReel.tags;
@@ -134,7 +136,8 @@ export const useReels = () => {
           is_liked: false,
           mood: mood,
           view_count: 0,
-          notes: newReel.notes || ''
+          notes: newReel.notes || '',
+          is_public: newReel.is_public ?? false
         }])
         .select()
         .single();
@@ -151,7 +154,8 @@ export const useReels = () => {
         mood: data.mood,
         view_count: data.view_count || 0,
         last_viewed: data.last_viewed,
-        notes: data.notes || ''
+        notes: data.notes || '',
+        is_public: data.is_public ?? false
       };
 
       setReels(prev => [formattedReel, ...prev]);
