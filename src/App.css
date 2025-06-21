@@ -40,3 +40,141 @@
 .read-the-docs {
   color: #888;
 }
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(-45deg, #6366f1, #06b6d4, #a21caf, #0ea5e9);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease-in-out infinite;
+  filter: blur(0px) brightness(1.1);
+  opacity: 0.95;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+
+/* Animated radial gradient background */
+@keyframes bgGradientMove {
+  0% {
+    background-position: 30% 20%;
+    background-size: 400% 400%;
+  }
+  50% {
+    background-position: 70% 80%;
+    background-size: 500% 500%;
+  }
+  100% {
+    background-position: 30% 20%;
+    background-size: 400% 400%;
+  }
+}
+.animate-bg-gradient {
+  background: radial-gradient(ellipse at 50% 50%, #181b3a 0%, #1e1b4b 60%, #020617 100%);
+  background: radial-gradient(ellipse at 30% 20%, #6366f1 0%, #1e1b4b 60%, #020617 100%);
+  background-size: 400% 400%;
+  animation: bgGradientMove 18s ease-in-out infinite;
+  width: 100vw;
+  height: 100vh;
+  filter: blur(0px) brightness(1.1);
+  opacity: 0.98;
+}
+
+/* Glowing button effect */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 24px 0 #06b6d4, 0 0 0 #fff0; }
+  50% { box-shadow: 0 0 48px 8px #6366f1, 0 0 0 #fff0; }
+}
+.animate-glow {
+  animation: glow 2.5s ease-in-out infinite;
+}
+
+body {
+  background: radial-gradient(ellipse at 50% 30%, #181b3a 0%, #0a0a23 100%);
+  min-height: 100vh;
+  color: #e0eaff;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated glowing stars */
+.stars-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #7dd3fc;
+  box-shadow: 0 0 8px 2px #38bdf8, 0 0 24px 4px #6366f1;
+  opacity: 0.7;
+  animation: starTwinkle 2.5s infinite ease-in-out;
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: linear-gradient(120deg, rgba(30,41,59,0.7) 60%, rgba(59,130,246,0.08) 100%);
+  border: 1.5px solid rgba(59,130,246,0.18);
+  border-radius: 1.5rem;
+  box-shadow: 0 0 32px 0 #38bdf8, 0 1.5px 8px 0 #020617;
+  backdrop-filter: blur(24px);
+}
+
+/* Neon text and glow */
+.neon-text {
+  color: #a5f3fc;
+  text-shadow: 0 0 24px #38bdf8, 0 0 8px #fff;
+}
+
+.neon-border {
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 24px #38bdf8, 0 0 8px #6366f1;
+}
+
+.neon-btn {
+  background: linear-gradient(90deg, #38bdf8 0%, #6366f1 100%);
+  color: #fff;
+  box-shadow: 0 0 24px #38bdf8, 0 0 8px #6366f1;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  transition: box-shadow 0.3s, background 0.3s;
+}
+.neon-btn:hover {
+  box-shadow: 0 0 48px 8px #38bdf8, 0 0 24px 4px #6366f1;
+  background: linear-gradient(90deg, #7dd3fc 0%, #a5b4fc 100%);
+}
+
+/* For outlined neon button */
+.neon-btn-outline {
+  border: 2px solid #38bdf8;
+  color: #a5f3fc;
+  background: transparent;
+  box-shadow: 0 0 12px #38bdf8;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  transition: box-shadow 0.3s, border 0.3s;
+}
+.neon-btn-outline:hover {
+  box-shadow: 0 0 32px 8px #38bdf8, 0 0 24px 4px #6366f1;
+  border-color: #a5f3fc;
+  color: #fff;
+}

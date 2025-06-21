@@ -32,32 +32,32 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-cyan-400/20">
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-3">
-            <img src="/logo.png" alt="ReelVault Logo" className="h-10 w-10 rounded-full object-cover shadow-lg" />
-            <span className="text-lg sm:text-2xl font-bold text-white">ReelVault</span>
+          <Link to="/" className="flex items-center gap-3 group">
+            <img src="/logo.png" alt="ReelVault Logo" className="h-10 w-10 rounded-full object-cover shadow-lg group-hover:scale-105 transition-transform" />
+            <span className="text-lg sm:text-2xl font-bold text-white transition-colors group-hover:text-cyan-300">ReelVault</span>
           </Link>
         </div>
         
         <div className="flex items-center gap-4">
           {user ? (
             <div className="hidden md:flex items-center gap-4">
-              <Button onClick={() => setIsFeedbackFormOpen(true)} className="bg-white/10 border border-cyan-400/30 text-cyan-300 hover:bg-white/20">
+              <Button onClick={() => setIsFeedbackFormOpen(true)} variant="outline" className="border-cyan-400/50 text-cyan-300 hover:bg-cyan-400/10 hover:text-cyan-200">
                 Share Feedback
               </Button>
-              <Button onClick={signOut} className="bg-pink-600/80 text-white hover:bg-pink-700/80">
+              <Button onClick={signOut} className="bg-pink-600/80 text-white hover:bg-pink-700/90">
                 Sign Out
               </Button>
             </div>
           ) : (
             <nav className="hidden md:flex items-center gap-6">
-              <a href="#features" onClick={(e) => { e.preventDefault(); handleNavigate('#features'); }} className="text-gray-300 hover:text-white transition-colors">Features</a>
-              <a href="#how-it-works" onClick={(e) => { e.preventDefault(); handleNavigate('#how-it-works'); }} className="text-gray-300 hover:text-white transition-colors">How It Works</a>
-              <a href="#about" onClick={(e) => { e.preventDefault(); handleNavigate('#about'); }} className="text-gray-300 hover:text-white transition-colors">About</a>
+              <a href="#features" onClick={(e) => { e.preventDefault(); handleNavigate('#features'); }} className="relative text-gray-300 hover:text-white transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full">Features</a>
+              <a href="#how-it-works" onClick={(e) => { e.preventDefault(); handleNavigate('#how-it-works'); }} className="relative text-gray-300 hover:text-white transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full">How It Works</a>
+              <a href="#about" onClick={(e) => { e.preventDefault(); handleNavigate('#about'); }} className="relative text-gray-300 hover:text-white transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-cyan-400 after:transition-all after:duration-300 hover:after:w-full">About</a>
               <Link to="/auth">
-                <Button className="bg-gradient-to-r from-cyan-600 to-pink-600 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-transform">
+                <Button className="bg-gradient-to-r from-cyan-500 to-pink-600 text-white font-bold rounded-full shadow-lg shadow-pink-500/20 hover:scale-105 hover:shadow-pink-500/30 transition-all duration-300 ease-in-out">
                   Sign In
                 </Button>
               </Link>

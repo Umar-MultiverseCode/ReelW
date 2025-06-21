@@ -1,64 +1,202 @@
-import React from 'react';
-import { Sparkles, BarChart, Film, Search, Wind } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Sparkles, BarChart, Film, Search, Wind, Heart, Share2, Lock, Zap, Users, Globe, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+
+const useCountUp = (end, duration = 2) => {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const step = (duration * 60);
+    const increment = end / step;
+    let currentFrame;
+    const timer = () => {
+      start += increment;
+      if (start < end) {
+        setCount(Math.ceil(start));
+        currentFrame = requestAnimationFrame(timer);
+      } else {
+        setCount(end);
+      }
+    };
+    timer();
+    return () => cancelAnimationFrame(currentFrame);
+  }, [end, duration]);
+  return count.toLocaleString();
+};
 
 const features = [
   {
     icon: Sparkles,
     title: 'AI-Powered Tagging',
-    description: 'Our AI automatically analyzes your reels and suggests relevant tags, saving you time and effort.',
+    description: 'Our advanced AI automatically analyzes your reels and suggests relevant tags, saving you hours of manual work.',
     color: 'text-cyan-400',
+    bgColor: 'bg-cyan-500/10',
+    borderColor: 'border-cyan-400/30'
   },
   {
     icon: Wind,
-    title: 'Automatic Mood Detection',
-    description: 'Instantly categorize your reels by mood. Find the perfect vibe, whether it\'s funny, motivational, or calm.',
+    title: 'Smart Mood Detection',
+    description: 'Instantly categorize your reels by mood - funny, motivational, calm, or energetic. Find the perfect vibe instantly.',
     color: 'text-pink-400',
+    bgColor: 'bg-pink-500/10',
+    borderColor: 'border-pink-400/30'
   },
   {
     icon: Film,
-    title: 'Centralized Library',
-    description: 'Keep all your favorite Instagram Reels and YouTube Shorts in one beautifully organized place.',
+    title: 'Unified Media Library',
+    description: 'Keep all your favorite Instagram Reels, YouTube Shorts, and TikTok videos in one beautifully organized vault.',
     color: 'text-purple-400',
+    bgColor: 'bg-purple-500/10',
+    borderColor: 'border-purple-400/30'
   },
   {
     icon: Search,
-    title: 'Advanced Search & Filter',
-    description: 'Quickly find any reel with powerful search that scans descriptions, tags, and even your personal notes.',
+    title: 'Lightning-Fast Search',
+    description: 'Find any reel instantly with powerful search that scans descriptions, tags, notes, and even video content.',
     color: 'text-green-400',
+    bgColor: 'bg-green-500/10',
+    borderColor: 'border-green-400/30'
   },
+  {
+    icon: Heart,
+    title: 'Personal Collections',
+    description: 'Create custom collections and playlists. Organize reels by theme, occasion, or your personal preferences.',
+    color: 'text-red-400',
+    bgColor: 'bg-red-500/10',
+    borderColor: 'border-red-400/30'
+  },
+  {
+    icon: Share2,
+    title: 'Seamless Sharing',
+    description: 'Share your favorite reels with friends and family. Generate beautiful shareable collections instantly.',
+    color: 'text-blue-400',
+    bgColor: 'bg-blue-500/10',
+    borderColor: 'border-blue-400/30'
+  },
+  {
+    icon: Lock,
+    title: 'Privacy First',
+    description: 'Your reels are private by default. Choose what to share and control who sees your collections.',
+    color: 'text-yellow-400',
+    bgColor: 'bg-yellow-500/10',
+    borderColor: 'border-yellow-400/30'
+  },
+  {
+    icon: Zap,
+    title: 'Instant Sync',
+    description: 'Your reels sync across all devices instantly. Access your library from anywhere, anytime.',
+    color: 'text-orange-400',
+    bgColor: 'bg-orange-500/10',
+    borderColor: 'border-orange-400/30'
+  }
 ];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6
+    }
+  }
+};
 
 const Features = () => {
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-slate-900/50">
+    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-slate-900/50 to-slate-800/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
-            Why You'll Love ReelVault
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-cyan-400/30 rounded-full px-4 py-2 text-cyan-300 text-sm font-medium mb-6">
+            <Sparkles size={16} />
+            <span>Powerful Features</span>
+          </div>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg mb-6">
+            Why Creators Choose ReelVault
           </h2>
-          <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
-            Discover the AI-powered features that make managing your reels effortless and fun.
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Experience the future of content organization with AI-powered features that make managing your digital library effortless and enjoyable.
           </p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        </motion.div>
+
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {features.map((feature, index) => (
-            <Card
+            <motion.div
               key={index}
-              className="bg-white/5 backdrop-blur-lg border border-white/10 text-white rounded-2xl shadow-xl hover:border-cyan-400/50 transition-all duration-300 transform hover:-translate-y-1"
+              variants={cardVariants}
+              whileHover={{ 
+                y: -8,
+                transition: { duration: 0.3 }
+              }}
             >
-              <CardHeader className="flex flex-row items-center gap-4">
-                <div className={`p-3 rounded-xl bg-white/10 ${feature.color}`}>
-                  <feature.icon className="w-8 h-8" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-white">{feature.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300 leading-relaxed">{feature.description}</p>
-              </CardContent>
-            </Card>
+              <Card className={`bg-white/5 backdrop-blur-lg border ${feature.borderColor} text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer`}>
+                <CardHeader className="flex flex-row items-start gap-4 pb-4">
+                  <div className={`p-3 rounded-xl ${feature.bgColor} ${feature.color} group-hover:scale-110 transition-transform duration-300`}>
+                    <feature.icon className="w-6 h-6" />
+                  </div>
+                  <CardTitle className="text-lg font-bold text-white leading-tight">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-gray-300 leading-relaxed text-sm">{feature.description}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
+
+        {/* Stats Section */}
+        <motion.div 
+          className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 text-cyan-400 mb-2">
+              <Users size={24} />
+              <span className="text-3xl font-bold">10K+</span>
+            </div>
+            <p className="text-gray-400">Active Creators</p>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 text-pink-400 mb-2">
+              <Film size={24} />
+              <span className="text-3xl font-bold">1M+</span>
+            </div>
+            <p className="text-gray-400">Reels Organized</p>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 text-purple-400 mb-2">
+              <Globe size={24} />
+              <span className="text-3xl font-bold">50+</span>
+            </div>
+            <p className="text-gray-400">Countries Served</p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -18,6 +18,32 @@ import Footer from '@/components/Footer';
 import FeedbackForm from '@/components/FeedbackForm';
 import { useFeedback } from '@/hooks/useFeedback';
 import MobileMenu from '@/components/MobileMenu';
+import AnimatedHero from '@/components/AnimatedHero';
+import FuturisticHero from '../components/FuturisticHero';
+
+// Animated stars background (CSS only)
+const StarsBg = () => {
+  const stars = Array.from({ length: 48 }).map((_, i) => {
+    const size = Math.random() * 2 + 1;
+    const top = Math.random() * 100;
+    const left = Math.random() * 100;
+    const duration = 2.5 + Math.random() * 2;
+    return (
+      <div
+        key={i}
+        className="star"
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          top: `${top}%`,
+          left: `${left}%`,
+          animationDuration: `${duration}s`,
+        }}
+      />
+    );
+  });
+  return <div className="stars-bg">{stars}</div>;
+};
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -89,23 +115,7 @@ const Index = () => {
       <div className="min-h-screen animated-gradient-background">
         <Header />
         <main>
-          <div className="relative flex items-center justify-center min-h-[90vh] sm:min-h-screen px-4">
-            <div className="container relative mx-auto">
-              <div className="flex flex-col items-center text-center">
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
-              ReelVault
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Save, organize, and discover your favorite Instagram Reels and YouTube Shorts with <span className="font-semibold text-cyan-300">AI-powered tagging</span> and <span className="font-semibold text-pink-300">mood detection</span>.
-            </p>
-            <Link to="/auth">
-                  <Button size="lg" className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 text-white px-8 sm:px-10 py-4 sm:py-6 text-base sm:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-bold">
-                    ✨ Get Started for Free
-              </Button>
-            </Link>
-          </div>
-        </div>
-          </div>
+          <FuturisticHero />
 
           <section id="features">
             <Features />

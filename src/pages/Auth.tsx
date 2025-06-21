@@ -1,13 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { Heart } from 'lucide-react';
+import { Film, LogIn } from 'lucide-react';
+import { AnimatedBg } from '@/components/AnimatedBg';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -49,11 +48,12 @@ const Auth = () => {
           description: error.message,
           variant: "destructive"
         });
-      } else if (!isLogin) {
+      } else {
         toast({
-          title: "Sign up successful!",
-          description: "Please check your email to confirm your account.",
+          title: isLogin ? "Login Successful!" : "Sign up successful!",
+          description: isLogin ? "Welcome back!" : "Please check your email to confirm your account.",
         });
+        navigate('/');
       }
     } catch (error) {
       toast({
@@ -67,48 +67,48 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center px-4">
-      <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-white/20 text-white">
-        <CardHeader className="text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-              <Heart className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-white font-bold text-xl">ReelVault</span>
-          </div>
-          <CardTitle className="text-2xl bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            {isLogin ? 'Welcome Back' : 'Create Account'}
-          </CardTitle>
-        </CardHeader>
+    <div className="relative min-h-screen w-full flex items-center justify-center p-4">
+      <AnimatedBg />
+      <div className="w-full max-w-md bg-slate-900/60 backdrop-blur-xl border border-cyan-400/20 rounded-3xl shadow-2xl shadow-cyan-500/10 text-white transition-all duration-500">
+        <div className="p-8 text-center">
+          <Link to="/" className="flex items-center justify-center gap-3 group mb-6">
+            <img src="/logo.png" alt="ReelVault Logo" className="h-10 w-10 rounded-full object-cover shadow-lg group-hover:scale-105 transition-transform" />
+            <span className="text-2xl font-bold text-white transition-colors group-hover:text-cyan-300">ReelVault</span>
+          </Link>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 via-pink-500 to-orange-500 text-transparent bg-clip-text mb-2">
+            {isLogin ? 'Welcome Back' : 'Create an Account'}
+          </h2>
+          <p className="text-gray-400 mb-6">{isLogin ? 'Sign in to access your vault.' : 'Join us to start building your reel library.'}</p>
+        </div>
         
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="px-8 pb-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-gray-300">
+              <Label htmlFor="email" className="text-sm font-medium text-cyan-200">
                 Email
               </Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+                className="bg-slate-800/60 border-2 border-slate-700 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-gray-300">
+              <Label htmlFor="password" className="text-sm font-medium text-cyan-200">
                 Password
               </Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="Enter your password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+                className="bg-slate-800/60 border-2 border-slate-700 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all"
                 required
               />
             </div>
@@ -116,32 +116,22 @@ const Auth = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+              className="w-full bg-gradient-to-r from-cyan-500 to-pink-600 text-white font-bold text-lg py-3 rounded-lg shadow-lg shadow-pink-500/20 hover:scale-105 hover:shadow-pink-500/40 transition-all duration-300 ease-in-out transform disabled:opacity-50 disabled:scale-100"
             >
-              {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Sign Up')}
+              {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
             </Button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-400">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}
-            </p>
-            <Button
-              variant="ghost"
+            <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-purple-400 hover:text-purple-300 mt-2"
+              className="text-sm text-cyan-300 hover:text-cyan-100 hover:underline"
             >
-              {isLogin ? 'Sign Up' : 'Sign In'}
-            </Button>
+              {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
+            </button>
           </div>
-
-          <div className="mt-4 text-center">
-            <Link to="/" className="text-gray-400 hover:text-white text-sm">
-              ← Back to Home
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };
