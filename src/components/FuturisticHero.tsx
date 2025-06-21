@@ -19,8 +19,11 @@ const FuturisticHero = () => {
   };
 
   return (
-    <section className="relative w-full flex flex-col items-center justify-center pt-24 pb-8 sm:pt-0 sm:pb-0">
-      <AnimatedBg />
+    <section className="relative w-full flex flex-col items-center justify-center pt-24 pb-8 sm:pt-32 sm:pb-12">
+      {/* Hide AnimatedBg on mobile, show only on sm and up */}
+      <span className="hidden sm:block">
+        <AnimatedBg />
+      </span>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

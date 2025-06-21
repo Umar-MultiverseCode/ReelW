@@ -166,37 +166,6 @@ const Features = () => {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Stats Section */}
-        <motion.div 
-          className="mt-8 sm:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 sm:gap-2 text-cyan-400 mb-1 sm:mb-2">
-              <Users size={16} />
-              <span className="text-lg sm:text-3xl font-bold">10K+</span>
-            </div>
-            <p className="text-xs sm:text-gray-400">Active Creators</p>
-          </div>
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 sm:gap-2 text-pink-400 mb-1 sm:mb-2">
-              <Film size={16} />
-              <span className="text-lg sm:text-3xl font-bold">1M+</span>
-            </div>
-            <p className="text-xs sm:text-gray-400">Reels Organized</p>
-          </div>
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-1 sm:gap-2 text-purple-400 mb-1 sm:mb-2">
-              <Globe size={16} />
-              <span className="text-lg sm:text-3xl font-bold">50+</span>
-            </div>
-            <p className="text-xs sm:text-gray-400">Countries Served</p>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

@@ -99,7 +99,7 @@ const HowItWorks = () => {
             {steps.map((step, index) => (
               <motion.div 
                 key={index} 
-                className="text-center relative flex flex-col items-center"
+                className="text-center relative flex flex-col items-center bg-white/5 border border-cyan-400/20 shadow-xl rounded-2xl p-6 sm:p-8"
                 variants={stepVariants}
                 whileHover={{ 
                   y: -8,
