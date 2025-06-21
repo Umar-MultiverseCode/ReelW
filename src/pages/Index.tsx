@@ -9,6 +9,12 @@ import Header from '@/components/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { useReels } from '@/hooks/useReels';
 import { Link } from 'react-router-dom';
+import AboutMe from '@/components/AboutMe';
+import Features from '@/components/Features';
+import HowItWorks from '@/components/HowItWorks';
+import CallToAction from '@/components/CallToAction';
+import Testimonials from '@/components/Testimonials';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,7 +55,7 @@ const Index = () => {
     setFilteredReels(filtered);
   }, [searchTerm, selectedMood, reels]);
 
-  const handleAddReel = async (newReel: { url: string; description: string; tags: string[]; notes?: string }) => {
+  const handleAddReel = async (newReel: { url: string; description: string; tags: string[]; notes?: string; is_public: boolean; }) => {
     await addReel(newReel);
     setShowForm(false);
   };
@@ -77,32 +83,43 @@ const Index = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen animated-gradient-background">
         <Header />
-        <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[80vh]">
-          <div className="flex flex-col items-center mb-10">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              ReelVault
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Save, organize, and discover your favorite Instagram Reels and YouTube Shorts with <span className="font-semibold text-cyan-300">AI-powered tagging</span> and <span className="font-semibold text-pink-300">mood detection</span>.
-            </p>
-            <Link to="/auth">
-              <Button className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                ✨ Get Started
-              </Button>
-            </Link>
+        <main>
+          <div className="relative flex items-center justify-center min-h-[90vh] sm:min-h-screen px-4">
+            <div className="container relative mx-auto">
+              <div className="flex flex-col items-center text-center">
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
+                  ReelVault
+                </h1>
+                <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  Save, organize, and discover your favorite Instagram Reels and YouTube Shorts with <span className="font-semibold text-cyan-300">AI-powered tagging</span> and <span className="font-semibold text-pink-300">mood detection</span>.
+                </p>
+                <Link to="/auth">
+                  <Button size="lg" className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 text-white px-8 sm:px-10 py-4 sm:py-6 text-base sm:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-bold">
+                    ✨ Get Started for Free
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col items-center text-center mt-2">
-            <p className="text-gray-200 text-xl font-semibold mb-2">Sign in to start saving your reels</p>
-            <p className="text-gray-400 mb-6">Create an account to access all AI-powered features and organize your favorite content.</p>
-            <Link to="/auth">
-              <Button className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:from-pink-600 hover:via-purple-600 hover:to-cyan-600 text-white px-8 py-3 text-lg rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 font-bold">
-                Sign In / Sign Up
-              </Button>
-            </Link>
-          </div>
-        </div>
+
+          <section id="features">
+            <Features />
+          </section>
+          <section id="how-it-works">
+            <HowItWorks />
+          </section>
+          <section id="testimonials">
+            <Testimonials />
+          </section>
+          <section id="about">
+            <AboutMe />
+          </section>
+
+          <CallToAction />
+        </main>
+        <Footer />
       </div>
     );
   }

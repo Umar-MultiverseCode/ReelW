@@ -1,50 +1,80 @@
 import React from 'react';
-import { Github, Heart, LogOut, User } from 'lucide-react';
+import { Github, Heart, LogOut, User, Film, Sun, Moon, MessageSquarePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import FeedbackForm from './FeedbackForm';
+import { useFeedback } from '@/hooks/useFeedback';
+
+const navLinks = [
+  { name: 'Features', href: '#features' },
+  { name: 'How It Works', href: '#how-it-works' },
+  { name: 'About', href: '#about' },
+];
 
 const Header = () => {
   const { user, signOut } = useAuth();
+  const [isFeedbackFormOpen, setIsFeedbackFormOpen] = useState(false);
+  const { addFeedback } = useFeedback();
+
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
+    e.preventDefault();
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-30 bg-white/10 backdrop-blur-xl shadow-lg border-b border-white/10">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="flex items-center space-x-3 group">
-          <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-            <Heart className="h-6 w-6 text-white drop-shadow-lg" />
-          </div>
-          <span className="text-white font-extrabold text-2xl tracking-tight bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:brightness-125 transition-all">ReelVault</span>
-        </Link>
-        <nav className="flex items-center space-x-6">
+    <header className="fixed top-0 left-0 w-full z-50 bg-slate-950/80 backdrop-blur-lg border-b border-white/10 shadow-md">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-20">
+          <Link to="/" className="flex items-center gap-2">
+            <Film className="h-8 w-8 text-cyan-400" />
+            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-pink-400 bg-clip-text text-transparent">
+              ReelVault
+            </span>
+          </Link>
+
           {user ? (
-            <div className="flex items-center space-x-4 ml-4">
-              <div className="flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-lg max-w-[120px] sm:max-w-xs overflow-hidden">
-                <User className="h-4 w-4 text-cyan-300" />
-                <span className="text-cyan-100 text-sm font-semibold truncate block max-w-[80px] sm:max-w-xs">
-                  {user.email.length > 18 ? `${user.email.slice(0, 6)}...${user.email.slice(user.email.indexOf('@'))}` : user.email}
+            <>
+              <div className="flex items-center gap-4">
+                <Button onClick={() => setIsFeedbackFormOpen(true)} variant="outline" size="sm" className="bg-white/10 text-cyan-300 border-cyan-400/30 hover:bg-cyan-400/20 hover:text-white hidden sm:flex">
+                  <MessageSquarePlus className="h-4 w-4 mr-2" />
+                  Share Feedback
+                </Button>
+                <span className="text-gray-300 hidden sm:inline">
+                  Welcome, {user.user_metadata?.name || user.email}
                 </span>
+                <Button onClick={signOut} variant="outline" size="sm" className="bg-white/10 text-pink-400 border-pink-400/30 hover:bg-pink-400/20 hover:text-pink-300">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
               </div>
-              <Button
-                onClick={signOut}
-                variant="ghost"
-                size="sm"
-                className="text-pink-400 hover:text-white hover:bg-pink-500/20 rounded-full px-3 py-1"
-              >
-                <LogOut className="h-4 w-4" />
-              </Button>
-            </div>
+              <FeedbackForm
+                isOpen={isFeedbackFormOpen}
+                onClose={() => setIsFeedbackFormOpen(false)}
+                onSubmit={addFeedback}
+              />
+            </>
           ) : (
-            <Link to="/auth">
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white rounded-full px-6 py-2 font-semibold shadow-lg hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-300 border-0"
-              >
-                Sign In
-              </Button>
-            </Link>
+            <nav className="hidden md:flex items-center gap-6">
+              {navLinks.map(link => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => handleScroll(e, link.href)}
+                  className="text-gray-300 hover:text-cyan-400 transition-colors font-medium"
+                >
+                  {link.name}
+                </a>
+              ))}
+               <Link to="/auth">
+                <Button className="bg-gradient-to-r from-cyan-600 to-pink-600 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform">
+                  Sign In
+                </Button>
+              </Link>
+            </nav>
           )}
-        </nav>
+        </div>
       </div>
     </header>
   );
