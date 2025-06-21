@@ -43,10 +43,18 @@ const Header = () => {
         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 relative z-50">
           {user ? (
             <div className="hidden md:flex items-center gap-4">
-              <Button onClick={() => setIsFeedbackFormOpen(true)} variant="outline" className="border-cyan-400/50 text-cyan-300 hover:bg-cyan-400/10 hover:text-cyan-200">
+              <Button
+                onClick={() => setIsFeedbackFormOpen(true)}
+                className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white font-bold rounded-full shadow-xl px-6 py-3 flex items-center gap-2 hover:scale-105 hover:shadow-cyan-400/30 active:scale-100 transition-all duration-300"
+              >
+                <MessageSquarePlus className="mr-2 h-5 w-5" />
                 Share Feedback
               </Button>
-              <Button onClick={signOut} className="bg-pink-600/80 text-white hover:bg-pink-700/90">
+              <Button
+                onClick={signOut}
+                className="bg-gradient-to-r from-pink-600 via-red-600 to-cyan-600 text-white font-bold rounded-full shadow-xl px-6 py-3 flex items-center gap-2 hover:scale-105 hover:shadow-pink-400/30 active:scale-100 transition-all duration-300"
+              >
+                <LogOut className="mr-2 h-5 w-5" />
                 Sign Out
               </Button>
             </div>

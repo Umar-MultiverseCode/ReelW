@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, Plus, Filter, TrendingUp, Clock, Heart, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +20,7 @@ import { useFeedback } from '@/hooks/useFeedback';
 import MobileMenu from '@/components/MobileMenu';
 import AnimatedHero from '@/components/AnimatedHero';
 import FuturisticHero from '../components/FuturisticHero';
+import { useInView } from 'framer-motion';
 
 // Animated stars background (CSS only)
 const StarsBg = () => {
@@ -43,6 +44,34 @@ const StarsBg = () => {
     );
   });
   return <div className="stars-bg">{stars}</div>;
+};
+
+// Improved Count up animation hook (triggers only when in view, returns span for JSX)
+const useCountUp = (end, duration = 2) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -50px 0px" });
+
+  useEffect(() => {
+    if (isInView) {
+      let start = 0;
+      const step = (duration * 60);
+      const increment = end / step;
+      let currentFrame;
+      const timer = () => {
+        start += increment;
+        if (start < end) {
+          setCount(Math.ceil(start));
+          currentFrame = requestAnimationFrame(timer);
+        } else {
+          setCount(end);
+        }
+      };
+      timer();
+      return () => cancelAnimationFrame(currentFrame);
+    }
+  }, [isInView, end, duration]);
+  return <span ref={ref}>{count.toLocaleString()}</span>;
 };
 
 const Index = () => {
@@ -101,6 +130,11 @@ const Index = () => {
     .filter(reel => reel.last_viewed)
     .sort((a, b) => new Date(b.last_viewed!).getTime() - new Date(a.last_viewed!).getTime())
     .slice(0, 3);
+
+  // For animated metrics
+  const animatedTotalReels = useCountUp(reels.length, 1.5);
+  const animatedLiked = useCountUp(reels.filter(r => r.is_liked).length, 1.5);
+  const animatedTotalViews = useCountUp(reels.reduce((acc, r) => acc + (r.view_count || 0), 0), 1.5);
 
   if (authLoading) {
     return (
@@ -211,15 +245,15 @@ const Index = () => {
               <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-cyan-200 text-sm sm:text-base font-medium bg-white/10 backdrop-blur-xl rounded-2xl p-3 sm:p-4 shadow-xl border border-white/10 transition-all">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
-                  <span>{reels.length} Total Reels</span>
+                  <span><strong className="text-cyan-300">{animatedTotalReels}</strong> Total Reels</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-pink-400" />
-                  <span>{reels.filter(r => r.is_liked).length} Liked</span>
+                  <span><strong className="text-pink-300">{animatedLiked}</strong> Liked</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
-                  <span>{reels.reduce((acc, r) => acc + (r.view_count || 0), 0)} Total Views</span>
+                  <span><strong className="text-cyan-300">{animatedTotalViews}</strong> Total Views</span>
                 </div>
               </div>
             </section>

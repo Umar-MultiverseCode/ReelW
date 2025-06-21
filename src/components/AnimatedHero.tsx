@@ -152,7 +152,7 @@ const AnimatedHero = () => {
             </div>
             <div className="flex items-center gap-2 text-slate-300 text-base">
               <Zap size={18} className="text-purple-400" />
-              <strong className="text-white">99.9%</strong>
+              <strong className="text-white">{useCountUp(99.9, 2).toFixed(1)}%</strong>
               <span>Uptime</span>
             </div>
           </motion.div>

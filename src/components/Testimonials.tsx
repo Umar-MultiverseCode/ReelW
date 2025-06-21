@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Star, Quote, Heart, Sparkles } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useFeedback } from '@/hooks/useFeedback';
 import { Skeleton } from './ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 
-const useCountUp = (end, duration = 2) => {
+// Improved useCountUp hook (returns span, animates on in-view)
+const useCountUp = (end, duration = 2, decimals = 0, suffix = '') => {
   const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -50px 0px" });
   useEffect(() => {
-    let start = 0;
-    const step = (duration * 60);
-    const increment = end / step;
-    let currentFrame;
-    const timer = () => {
-      start += increment;
-      if (start < end) {
-        setCount(Math.ceil(start));
-        currentFrame = requestAnimationFrame(timer);
-      } else {
-        setCount(end);
-      }
-    };
-    timer();
-    return () => cancelAnimationFrame(currentFrame);
-  }, [end, duration]);
-  return count.toLocaleString();
-};
-
-const AnimatedNumber = ({ end, duration = 2, suffix = '' }) => {
-  const value = useCountUp(end, duration);
-  return <>{value}{suffix}</>;
+    if (isInView) {
+      let start = 0;
+      const step = (duration * 60);
+      const increment = end / step;
+      let currentFrame;
+      const timer = () => {
+        start += increment;
+        if (start < end) {
+          setCount(Number(start.toFixed(decimals)));
+          currentFrame = requestAnimationFrame(timer);
+        } else {
+          setCount(Number(end.toFixed(decimals)));
+        }
+      };
+      timer();
+      return () => cancelAnimationFrame(currentFrame);
+    }
+  }, [isInView, end, duration, decimals]);
+  return <span ref={ref}>{decimals > 0 ? count.toFixed(decimals) : count.toLocaleString()}{suffix}</span>;
 };
 
 const Testimonials = () => {
@@ -56,6 +56,11 @@ const Testimonials = () => {
       }
     }
   };
+
+  const rating = useCountUp(4.9, 1.5, 1, '/5');
+  const users = useCountUp(10000, 2, 0, 'K+');
+  const reels = useCountUp(1000000, 2.5, 0, 'M+');
+  const satisfaction = useCountUp(99, 1.5, 0, '%');
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 xl:py-24 bg-gradient-to-b from-slate-800/30 to-slate-900/50">
@@ -186,19 +191,19 @@ const Testimonials = () => {
           viewport={{ once: true }}
         >
           <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-bold text-cyan-400 mb-1 sm:mb-2">4.9/5</div>
+            <div className="text-2xl sm:text-3xl font-bold text-cyan-400 mb-1 sm:mb-2">{rating}</div>
             <p className="text-gray-400 text-xs sm:text-sm">Average Rating</p>
           </div>
           <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-bold text-pink-400 mb-1 sm:mb-2">10K+</div>
+            <div className="text-2xl sm:text-3xl font-bold text-pink-400 mb-1 sm:mb-2">{users}</div>
             <p className="text-gray-400 text-xs sm:text-sm">Happy Users</p>
           </div>
           <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-bold text-purple-400 mb-1 sm:mb-2">1M+</div>
+            <div className="text-2xl sm:text-3xl font-bold text-purple-400 mb-1 sm:mb-2">{reels}</div>
             <p className="text-gray-400 text-xs sm:text-sm">Reels Organized</p>
           </div>
           <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-bold text-green-400 mb-1 sm:mb-2">99%</div>
+            <div className="text-2xl sm:text-3xl font-bold text-green-400 mb-1 sm:mb-2">{satisfaction}</div>
             <p className="text-gray-400 text-xs sm:text-sm">Satisfaction Rate</p>
           </div>
         </motion.div>

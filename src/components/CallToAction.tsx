@@ -1,10 +1,43 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Sparkles, ArrowRight, Zap, Star, Users, Clock } from 'lucide-react';
+import { useInView } from 'framer-motion';
+
+// Animated count-up hook for numbers
+const useCountUp = (end, duration = 2, decimals = 0, suffix = '') => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -50px 0px" });
+  useEffect(() => {
+    if (isInView) {
+      let start = 0;
+      const step = (duration * 60);
+      const increment = end / step;
+      let currentFrame;
+      const timer = () => {
+        start += increment;
+        if (start < end) {
+          setCount(Number(start.toFixed(decimals)));
+          currentFrame = requestAnimationFrame(timer);
+        } else {
+          setCount(Number(end.toFixed(decimals)));
+        }
+      };
+      timer();
+      return () => cancelAnimationFrame(currentFrame);
+    }
+  }, [isInView, end, duration, decimals]);
+  return <span ref={ref}>{decimals > 0 ? count.toFixed(decimals) : count.toLocaleString()}{suffix}</span>;
+};
 
 const CallToAction = () => {
+  const creatorsCount = useCountUp(10000, 2, 0, '+');
+  const ratingCount = useCountUp(4.9, 1.5, 1, '/5');
+  const setupSeconds = useCountUp(30, 1.2, 0, '');
+  const happyUsers = useCountUp(10000, 2, 0, '+');
+
   return (
     <section className="py-12 sm:py-16 lg:py-20 xl:py-24 bg-gradient-to-b from-slate-900/50 to-slate-800/30">
       <div className="container mx-auto px-3 sm:px-4">
@@ -53,7 +86,7 @@ const CallToAction = () => {
               viewport={{ once: true }}
             >
               <Sparkles size={14} className="sm:w-4 sm:h-4" />
-              <span>Join 10,000+ Creators</span>
+              <span>Join {creatorsCount} Creators</span>
             </motion.div>
 
             {/* Main Heading */}
@@ -91,15 +124,15 @@ const CallToAction = () => {
             >
               <div className="flex items-center gap-2 sm:gap-3 text-cyan-300">
                 <Zap size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
-                <span className="text-xs sm:text-sm">Setup in 30 seconds</span>
+                <span className="text-xs sm:text-sm">Setup in {setupSeconds} seconds</span>
               </div>
               <div className="flex items-center gap-2 sm:gap-3 text-pink-300">
                 <Users size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
-                <span className="text-xs sm:text-sm">10K+ happy users</span>
+                <span className="text-xs sm:text-sm">{happyUsers} happy users</span>
               </div>
               <div className="flex items-center gap-2 sm:gap-3 text-purple-300">
                 <Star size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
-                <span className="text-xs sm:text-sm">Free forever plan</span>
+                <span className="text-xs sm:text-sm">{ratingCount} rating</span>
               </div>
             </motion.div>
 
@@ -141,11 +174,11 @@ const CallToAction = () => {
               </div>
               <div className="flex items-center gap-1">
                 <Users size={12} className="sm:w-3.5 sm:h-3.5" />
-                <span>Join 10K+ creators</span>
+                <span>Join {creatorsCount} creators</span>
               </div>
               <div className="flex items-center gap-1">
                 <Star size={12} className="sm:w-3.5 sm:h-3.5" />
-                <span>4.9/5 rating</span>
+                <span>{ratingCount} rating</span>
               </div>
             </motion.div>
           </div>

@@ -76,65 +76,65 @@ const ReelForm: React.FC<ReelFormProps> = ({ onClose, onSubmit, suggestTags, det
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-slate-950/80 backdrop-blur-xl border border-white/10 text-white shadow-2xl p-0">
         <Card className="w-full bg-transparent border-none shadow-none">
-          <CardHeader className="flex flex-row items-center justify-between pb-4">
-            <CardTitle className="text-xl sm:text-2xl bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-bold">
-              ✨ Add New Reel
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 sm:space-y-6 max-h-[80vh] overflow-y-auto">
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="url" className="text-sm font-medium text-gray-300 flex items-center gap-2"><LinkIcon className="h-4 w-4" />Reel URL *</Label>
+        <CardHeader className="flex flex-row items-center justify-between pb-4">
+          <CardTitle className="text-xl sm:text-2xl bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-bold">
+            ✨ Add New Reel
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 sm:space-y-6 max-h-[80vh] overflow-y-auto">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="url" className="text-sm font-medium text-gray-300 flex items-center gap-2"><LinkIcon className="h-4 w-4" />Reel URL *</Label>
                 <Input id="url" type="url" placeholder="https://instagram.com/reel/... or https://youtube.com/shorts/..." value={url} onChange={(e) => setUrl(e.target.value)} className="bg-white/5 border-white/10 text-cyan-100 placeholder-cyan-200" />
-              </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-medium text-gray-300 flex items-center gap-2">
-                  <Brain className="h-4 w-4" />Description * 
-                  {detectedMood && <Badge className={`ml-2 ${getMoodColor(detectedMood)} border text-xs`}>{detectedMood}</Badge>}
-                </Label>
+            <div className="space-y-2">
+              <Label htmlFor="description" className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                <Brain className="h-4 w-4" />Description * 
+                {detectedMood && <Badge className={`ml-2 ${getMoodColor(detectedMood)} border text-xs`}>{detectedMood}</Badge>}
+              </Label>
                 <Textarea id="description" placeholder="Describe the reel... (AI will suggest tags and detect mood)" value={description} onChange={handleDescriptionChange} className="bg-white/5 border-white/10 min-h-20 text-cyan-100 placeholder-cyan-200" />
-              </div>
+            </div>
 
-              {suggestedTags.length > 0 && (
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-300 flex items-center gap-2"><Sparkles className="h-4 w-4 text-cyan-400" />AI Suggested Tags</Label>
-                  <div className="flex flex-wrap gap-2">
-                    {suggestedTags.map((tag, index) => (
-                      <Button key={index} type="button" variant="outline" size="sm" onClick={() => addSuggestedTag(tag)} className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-400/30 text-cyan-300 hover:bg-cyan-400/20 text-xs rounded-full">
-                        + {tag}
-                      </Button>
-                    ))}
-                  </div>
+            {suggestedTags.length > 0 && (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-300 flex items-center gap-2"><Sparkles className="h-4 w-4 text-cyan-400" />AI Suggested Tags</Label>
+                <div className="flex flex-wrap gap-2">
+                  {suggestedTags.map((tag, index) => (
+                    <Button key={index} type="button" variant="outline" size="sm" onClick={() => addSuggestedTag(tag)} className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-400/30 text-cyan-300 hover:bg-cyan-400/20 text-xs rounded-full">
+                      + {tag}
+                    </Button>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
 
-              <div className="space-y-2">
-                <Label htmlFor="tags" className="text-sm font-medium text-gray-300">Your Tags (comma separated)</Label>
+            <div className="space-y-2">
+              <Label htmlFor="tags" className="text-sm font-medium text-gray-300">Your Tags (comma separated)</Label>
                 <Input id="tags" placeholder="e.g. cooking, recipe, tutorial" value={tags.join(', ')} onChange={(e) => setTags(e.target.value.split(',').map(t => t.trim()))} className="bg-white/5 border-white/10 text-cyan-100 placeholder-cyan-200" />
-              </div>
+            </div>
 
-              <div className="space-y-2">
-                  <Label htmlFor="notes">Personal Notes (optional)</Label>
+            <div className="space-y-2">
+                <Label htmlFor="notes">Personal Notes (optional)</Label>
                   <Textarea id="notes" placeholder="Add your thoughts or reminders..." value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-white/5 border-white/10 min-h-16 text-cyan-100 placeholder-cyan-200" />
-              </div>
+            </div>
 
-              <div className="flex items-center space-x-3 pt-2">
-                <Switch id="is-public" checked={isPublic} onCheckedChange={setIsPublic} />
+            <div className="flex items-center space-x-3 pt-2">
+              <Switch id="is-public" checked={isPublic} onCheckedChange={setIsPublic} />
                 <Label htmlFor="is-public" className="text-cyan-200 font-semibold">Make this reel public</Label>
-              </div>
+            </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <Button type="submit" disabled={isSubmitting} className="flex-1 bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 text-white font-medium rounded-xl py-2.5">
-                  {isSubmitting ? 'Saving...' : '✨ Save Reel'}
-                </Button>
-                <Button type="button" onClick={onClose} variant="secondary" className="bg-white/10 hover:bg-white/20 text-white rounded-xl py-2.5">
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <Button type="submit" disabled={isSubmitting} className="flex-1 bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 text-white font-medium rounded-xl py-2.5">
+                {isSubmitting ? 'Saving...' : '✨ Save Reel'}
+              </Button>
+              <Button type="button" onClick={onClose} variant="secondary" className="bg-white/10 hover:bg-white/20 text-white rounded-xl py-2.5">
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
       </DialogContent>
     </Dialog>
   );

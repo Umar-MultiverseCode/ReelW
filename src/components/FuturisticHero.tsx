@@ -5,6 +5,35 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { AnimatedBg } from './AnimatedBg';
+import { useRef, useState, useEffect } from 'react';
+import { useInView } from 'framer-motion';
+
+// Animated count-up hook for numbers
+const useCountUp = (end, duration = 2, decimals = 0, suffix = '') => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -50px 0px" });
+  useEffect(() => {
+    if (isInView) {
+      let start = 0;
+      const step = (duration * 60);
+      const increment = end / step;
+      let currentFrame;
+      const timer = () => {
+        start += increment;
+        if (start < end) {
+          setCount(Number(start.toFixed(decimals)));
+          currentFrame = requestAnimationFrame(timer);
+        } else {
+          setCount(Number(end.toFixed(decimals)));
+        }
+      };
+      timer();
+      return () => cancelAnimationFrame(currentFrame);
+    }
+  }, [isInView, end, duration, decimals]);
+  return <span ref={ref}>{decimals > 0 ? count.toFixed(decimals) : count.toLocaleString()}{suffix}</span>;
+};
 
 const FuturisticHero = () => {
   const { user } = useAuth();
@@ -17,6 +46,10 @@ const FuturisticHero = () => {
       // Logic for logged-in user
     }
   };
+
+  const usersCount = useCountUp(10000, 2, 0, '+');
+  const trustedCount = useCountUp(10000, 2, 0, '+');
+  const ratingCount = useCountUp(4.9, 1.5, 1, '/5');
 
   return (
     <section className="relative w-full flex flex-col items-center justify-center pt-24 pb-8 sm:pt-32 sm:pb-12">
@@ -45,7 +78,7 @@ const FuturisticHero = () => {
             {/* 2-row, 3-column perfectly aligned rectangular feature cards on mobile, grid on sm+ */}
             <div className="w-full max-w-xs mx-auto sm:hidden mb-6 grid grid-cols-3 gap-3">
               <span className="w-full h-12 min-w-0 flex flex-col justify-center items-center text-center bg-white/10 rounded-xl text-xs font-semibold text-gray-100 border border-white/10 shadow-sm"><Zap className="h-4 w-4 text-yellow-400 mb-1" />Setup in 30s</span>
-              <span className="w-full h-12 min-w-0 flex flex-col justify-center items-center text-center bg-white/10 rounded-xl text-xs font-semibold text-gray-100 border border-white/10 shadow-sm"><Users className="h-4 w-4 text-blue-400 mb-1" />10K+ users</span>
+              <span className="w-full h-12 min-w-0 flex flex-col justify-center items-center text-center bg-white/10 rounded-xl text-xs font-semibold text-gray-100 border border-white/10 shadow-sm"><Users className="h-4 w-4 text-blue-400 mb-1" />{usersCount} users</span>
               <span className="w-full h-12 min-w-0 flex flex-col justify-center items-center text-center bg-white/10 rounded-xl text-xs font-semibold text-gray-100 border border-white/10 shadow-sm"><CheckCircle2 className="h-4 w-4 text-green-400 mb-1" />Free forever</span>
               <span className="w-full h-12 min-w-0 flex flex-col justify-center items-center text-center bg-white/10 rounded-xl text-xs font-semibold text-gray-100 border border-white/10 shadow-sm"><Wand2 className="h-4 w-4 text-purple-400 mb-1" />AI Org</span>
               <span className="w-full h-12 min-w-0 flex flex-col justify-center items-center text-center bg-white/10 rounded-xl text-xs font-semibold text-gray-100 border border-white/10 shadow-sm"><Save className="h-4 w-4 text-cyan-400 mb-1" />Unlimited</span>
@@ -54,7 +87,7 @@ const FuturisticHero = () => {
             {/* sm+ grid as before */}
             <div className="hidden sm:grid w-full max-w-4xl mx-auto grid-cols-3 gap-3 text-sm px-1 mb-2">
               <span className="flex items-center gap-1 text-gray-300 bg-white/5 p-2 rounded-lg justify-center"><Zap className="h-4 w-4 text-yellow-400" /> Setup in 30s</span>
-              <span className="flex items-center gap-1 text-gray-300 bg-white/5 p-2 rounded-lg justify-center"><Users className="h-4 w-4 text-blue-400" /> 10K+ happy users</span>
+              <span className="flex items-center gap-1 text-gray-300 bg-white/5 p-2 rounded-lg justify-center"><Users className="h-4 w-4 text-blue-400" /> {usersCount} happy users</span>
               <span className="flex items-center gap-1 text-gray-300 bg-white/5 p-2 rounded-lg justify-center"><CheckCircle2 className="h-4 w-4 text-green-400" /> Free forever</span>
               <span className="flex items-center gap-1 text-gray-300 bg-white/5 p-2 rounded-lg justify-center"><Wand2 className="h-4 w-4 text-purple-400" /> AI Org</span>
               <span className="flex items-center gap-1 text-gray-300 bg-white/5 p-2 rounded-lg justify-center"><Save className="h-4 w-4 text-cyan-400" /> Unlimited</span>
@@ -78,8 +111,8 @@ const FuturisticHero = () => {
                 The #1 AI Vault for Creators
               </Badge>
               <div className="flex flex-wrap justify-center items-center gap-x-1 gap-y-0.5 text-xs text-gray-400">
-                <span className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3 text-green-400" /> Trusted by 10,000+</span>
-                <span className="flex items-center gap-1"><Star className="h-3 w-3 text-yellow-400" /> 4.9/5 rating</span>
+                <span className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3 text-green-400" /> Trusted by {trustedCount}</span>
+                <span className="flex items-center gap-1"><Star className="h-3 w-3 text-yellow-400" /> {ratingCount} rating</span>
                 <span className="flex items-center gap-1"><CreditCard className="h-3 w-3 text-gray-500" /> No credit card required</span>
               </div>
             </div>
@@ -89,8 +122,8 @@ const FuturisticHero = () => {
                 The #1 AI Vault for Creators
               </Badge>
               <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm text-gray-400 mb-0">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-green-400" /> Trusted by 10,000+</span>
-                <span className="flex items-center gap-1.5"><Star className="h-4 w-4 text-yellow-400" /> 4.9/5 rating</span>
+                <span className="flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-green-400" /> Trusted by {trustedCount}</span>
+                <span className="flex items-center gap-1.5"><Star className="h-4 w-4 text-yellow-400" /> {ratingCount} rating</span>
                 <span className="flex items-center gap-1.5"><CreditCard className="h-4 w-4 text-gray-500" /> No credit card required</span>
               </div>
               <Button
