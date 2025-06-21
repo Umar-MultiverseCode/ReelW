@@ -37,7 +37,7 @@ const Header = () => {
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-3">
             <img src="/logo.png" alt="ReelVault Logo" className="h-10 w-10 rounded-full object-cover shadow-lg" />
-            <span className="text-2xl font-bold text-white hidden sm:inline">ReelVault</span>
+            <span className="text-lg sm:text-2xl font-bold text-white">ReelVault</span>
           </Link>
         </div>
         

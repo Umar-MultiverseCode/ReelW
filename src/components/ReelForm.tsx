@@ -36,13 +36,13 @@ const ReelForm: React.FC<ReelFormProps> = ({ onClose, onSubmit, suggestTags, det
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-    };
+  };
   }, [onClose]);
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newDescription = e.target.value;
     setDescription(newDescription);
-
+    
     if (newDescription.trim().length > 10) {
       const suggestions = suggestTags(newDescription);
       setSuggestedTags(suggestions);
@@ -59,16 +59,16 @@ const ReelForm: React.FC<ReelFormProps> = ({ onClose, onSubmit, suggestTags, det
       setTags([...tags, tag]);
     }
   };
-  
+
   const getMoodColor = (mood: string) => {
     const colors = {
-        'Funny': 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-        'Motivational': 'bg-orange-500/20 text-orange-300 border-orange-500/30',
-        'Educational': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-        'Calm': 'bg-green-500/20 text-green-300 border-green-500/30',
-        'Emotional': 'bg-pink-500/20 text-pink-300 border-pink-500/30',
-        'Creative': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-        'Energetic': 'bg-red-500/20 text-red-300 border-red-500/30'
+      'Funny': 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
+      'Motivational': 'bg-orange-500/20 text-orange-300 border-orange-500/30',
+      'Educational': 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+      'Calm': 'bg-green-500/20 text-green-300 border-green-500/30',
+      'Emotional': 'bg-pink-500/20 text-pink-300 border-pink-500/30',
+      'Creative': 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+      'Energetic': 'bg-red-500/20 text-red-300 border-red-500/30'
     };
     return colors[mood as keyof typeof colors] || 'bg-gray-500/20 text-gray-300 border-gray-500/30';
   };
