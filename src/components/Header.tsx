@@ -32,7 +32,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-cyan-400/20">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-slate-900/80 via-purple-900/70 to-cyan-900/80 backdrop-blur-xl border-b border-cyan-400/20 rounded-b-3xl sm:rounded-b-2xl shadow-xl px-2 py-1 sm:px-8 sm:py-3">
       <nav className="w-full flex justify-between items-center px-3 py-2 sm:container sm:mx-auto sm:px-4 lg:px-8 sm:py-3">
         <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 z-0 relative">
           <Link to="/" className="flex items-center gap-2 sm:gap-3 group">

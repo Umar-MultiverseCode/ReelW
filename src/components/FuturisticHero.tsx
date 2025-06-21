@@ -105,6 +105,9 @@ const FuturisticHero = () => {
             <p className="text-sm sm:text-lg lg:text-xl text-gray-300 max-w-3xl px-1 mb-0 sm:mb-0">
               Organize, save, and never lose your favorite reels again.
             </p>
+            <div className="mt-8 text-center text-sm text-cyan-200/70 italic">
+              ↓ Scroll down to explore more features!
+            </div>
           </div>
         </div>
       </motion.div>
