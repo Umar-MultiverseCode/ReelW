@@ -1,5 +1,5 @@
-import React from 'react';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
+import React, { useState } from 'react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Menu, LogOut, MessageSquarePlus, User, Home, Info, Sparkles } from 'lucide-react';
 
@@ -17,8 +17,29 @@ const loggedOutLinks = [
 ];
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isLoggedIn, onSignOut, onShowFeedbackForm, onNavigate }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleNavigation = (href: string) => {
+    onNavigate(href);
+    setIsOpen(false);
+  };
+
+  const handleSignOut = () => {
+    if (onSignOut) {
+      onSignOut();
+    }
+    setIsOpen(false);
+  };
+  
+  const handleShowFeedback = () => {
+      if (onShowFeedbackForm) {
+          onShowFeedbackForm();
+      }
+      setIsOpen(false);
+  }
+
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="md:hidden bg-white/10 border-cyan-400/30 text-cyan-300">
           <Menu className="h-6 w-6" />
@@ -29,37 +50,31 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isLoggedIn, onSignOut, onShowFe
           <div className="flex-grow">
             <nav className="flex flex-col gap-2">
             {isLoggedIn ? (
-              <SheetClose asChild>
-                <Button onClick={onShowFeedbackForm} variant="ghost" className="w-full justify-start text-lg py-4">
+                <Button onClick={handleShowFeedback} variant="ghost" className="w-full justify-start text-lg py-4">
                   <MessageSquarePlus className="mr-3 h-5 w-5" />
                   Share Feedback
                 </Button>
-              </SheetClose>
             ) : (
                 loggedOutLinks.map(link => (
-                    <SheetClose asChild key={link.name}>
-                        <Button onClick={() => onNavigate(link.href)} variant="ghost" className="w-full justify-start text-lg py-4">
-                            <link.icon className="mr-3 h-5 w-5" />
-                            {link.name}
-                        </Button>
-                    </SheetClose>
+                    <Button key={link.name} onClick={() => handleNavigation(link.href)} variant="ghost" className="w-full justify-start text-lg py-4">
+                        <link.icon className="mr-3 h-5 w-5" />
+                        {link.name}
+                    </Button>
                 ))
             )}
             </nav>
           </div>
           <div className="mt-auto">
-            <SheetClose asChild>
             {isLoggedIn ? (
-              <Button onClick={onSignOut} variant="ghost" className="w-full justify-start text-lg py-4 text-pink-400 hover:text-pink-300">
+              <Button onClick={handleSignOut} variant="ghost" className="w-full justify-start text-lg py-4 text-pink-400 hover:text-pink-300">
                 <LogOut className="mr-3 h-5 w-5" />
                 Sign Out
               </Button>
             ) : (
-                <Button onClick={() => onNavigate('/auth')} className="w-full bg-gradient-to-r from-cyan-600 to-pink-600 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-transform py-6 text-lg">
+                <Button onClick={() => handleNavigation('/auth')} className="w-full bg-gradient-to-r from-cyan-600 to-pink-600 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-transform py-6 text-lg">
                     Sign In / Sign Up
                 </Button>
             )}
-            </SheetClose>
           </div>
         </div>
       </SheetContent>
