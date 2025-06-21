@@ -58,29 +58,29 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-slate-800/30 to-slate-900/50">
-      <div className="container mx-auto px-4">
+    <section className="py-12 sm:py-16 lg:py-20 xl:py-24 bg-gradient-to-b from-slate-800/30 to-slate-900/50">
+      <div className="container mx-auto px-3 sm:px-4">
         <motion.div 
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-purple-400/30 rounded-full px-4 py-2 text-purple-300 text-sm font-medium mb-6">
-            <Heart size={16} />
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-purple-400/30 rounded-full px-3 sm:px-4 py-2 text-purple-300 text-xs sm:text-sm font-medium mb-4 sm:mb-6">
+            <Heart size={14} className="sm:w-4 sm:h-4" />
             <span>User Testimonials</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg mb-6">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg mb-4 sm:mb-6 px-2">
             Loved by Creators Worldwide
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-3">
             Join thousands of satisfied creators who have transformed their content organization with ReelVault.
           </p>
         </motion.div>
 
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -89,7 +89,7 @@ const Testimonials = () => {
           {loading ? (
             Array.from({ length: 3 }).map((_, index) => (
               <motion.div key={index} variants={cardVariants}>
-                <Card className="bg-white/5 p-6 rounded-2xl border border-white/10">
+                <Card className="bg-white/5 p-4 sm:p-6 rounded-2xl border border-white/10">
                   <Skeleton className="h-6 w-2/5 mb-4" />
                   <Skeleton className="h-4 w-full mb-2" />
                   <Skeleton className="h-4 w-full mb-4" />
@@ -115,39 +115,39 @@ const Testimonials = () => {
                 }}
               >
                 <Card className="bg-white/5 backdrop-blur-lg border border-white/10 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col justify-between h-full group">
-                  <CardContent className="pt-6">
+                  <CardContent className="pt-4 sm:pt-6">
                     {/* Quote Icon */}
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="flex justify-between items-start mb-3 sm:mb-4">
                       <div className="flex">
                         {[...Array(5)].map((_, i) => (
                           <Star 
                             key={i} 
-                            className={`w-5 h-5 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-600'}`} 
+                            className={`w-4 h-4 sm:w-5 sm:h-5 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-600'}`} 
                           />
                         ))}
                       </div>
-                      <Quote className="w-8 h-8 text-purple-400/50 group-hover:text-purple-400 transition-colors" />
+                      <Quote className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400/50 group-hover:text-purple-400 transition-colors" />
                     </div>
                     
                     {/* Testimonial Text */}
-                    <blockquote className="text-gray-300 leading-relaxed italic text-lg mb-6">
+                    <blockquote className="text-gray-300 leading-relaxed italic text-sm sm:text-lg mb-4 sm:mb-6">
                       "{testimonial.comment}"
                     </blockquote>
 
                     {/* User Info */}
-                    <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-                      <Avatar className="w-12 h-12 ring-2 ring-purple-400/30 group-hover:ring-purple-400/50 transition-all">
+                    <div className="flex items-center gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-white/10">
+                      <Avatar className="w-10 h-10 sm:w-12 sm:h-12 ring-2 ring-purple-400/30 group-hover:ring-purple-400/50 transition-all">
                         <AvatarImage src={testimonial.user_avatar_url} alt={testimonial.user_name} />
                         <AvatarFallback className="bg-gradient-to-r from-cyan-400 to-purple-400 text-white font-bold">
                           {testimonial.user_name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-bold text-white">{testimonial.user_name}</p>
-                        <p className="text-sm text-gray-400">Verified User</p>
+                        <p className="font-bold text-white text-sm sm:text-base">{testimonial.user_name}</p>
+                        <p className="text-xs sm:text-sm text-gray-400">Verified User</p>
                       </div>
                       <div className="ml-auto">
-                        <Sparkles className="w-5 h-5 text-yellow-400" />
+                        <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />
                       </div>
                     </div>
                   </CardContent>
@@ -162,14 +162,14 @@ const Testimonials = () => {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-12 max-w-2xl mx-auto">
-                <Heart className="w-16 h-16 text-purple-400 mx-auto mb-6" />
-                <h3 className="text-2xl font-bold text-white mb-4">Be the First to Share Your Experience!</h3>
-                <p className="text-gray-300 leading-relaxed mb-6">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-12 max-w-2xl mx-auto">
+                <Heart className="w-12 h-12 sm:w-16 sm:h-16 text-purple-400 mx-auto mb-4 sm:mb-6" />
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Be the First to Share Your Experience!</h3>
+                <p className="text-gray-300 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
                   Join our community of creators and share how ReelVault has transformed your content organization.
                 </p>
-                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-sm border border-cyan-400/30 rounded-full px-6 py-3 text-cyan-300 text-lg font-medium">
-                  <Sparkles size={20} />
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-sm border border-cyan-400/30 rounded-full px-4 sm:px-6 py-2 sm:py-3 text-cyan-300 text-sm sm:text-lg font-medium">
+                  <Sparkles size={16} className="sm:w-5 sm:h-5" />
                   <span>Share Your Feedback</span>
                 </div>
               </div>
@@ -179,27 +179,27 @@ const Testimonials = () => {
 
         {/* Stats Section */}
         <motion.div 
-          className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-8"
+          className="mt-12 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
           viewport={{ once: true }}
         >
           <div className="text-center">
-            <div className="text-3xl font-bold text-cyan-400 mb-2">4.9/5</div>
-            <p className="text-gray-400">Average Rating</p>
+            <div className="text-2xl sm:text-3xl font-bold text-cyan-400 mb-1 sm:mb-2">4.9/5</div>
+            <p className="text-gray-400 text-xs sm:text-sm">Average Rating</p>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-pink-400 mb-2">10K+</div>
-            <p className="text-gray-400">Happy Users</p>
+            <div className="text-2xl sm:text-3xl font-bold text-pink-400 mb-1 sm:mb-2">10K+</div>
+            <p className="text-gray-400 text-xs sm:text-sm">Happy Users</p>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-purple-400 mb-2">1M+</div>
-            <p className="text-gray-400">Reels Organized</p>
+            <div className="text-2xl sm:text-3xl font-bold text-purple-400 mb-1 sm:mb-2">1M+</div>
+            <p className="text-gray-400 text-xs sm:text-sm">Reels Organized</p>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-green-400 mb-2">99%</div>
-            <p className="text-gray-400">Satisfaction Rate</p>
+            <div className="text-2xl sm:text-3xl font-bold text-green-400 mb-1 sm:mb-2">99%</div>
+            <p className="text-gray-400 text-xs sm:text-sm">Satisfaction Rate</p>
           </div>
         </motion.div>
       </div>

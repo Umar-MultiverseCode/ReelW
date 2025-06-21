@@ -140,36 +140,36 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900 flex flex-col">
       <Header />
-      <main className="flex-1 pt-28 pb-12">
-        <div className="container mx-auto px-4">
+      <main className="flex-1 pt-20 sm:pt-28 pb-8 sm:pb-12">
+        <div className="container mx-auto px-3 sm:px-4">
           {/* Hero Section */}
-          <section className="flex flex-col items-center justify-center mt-10 mb-8">
-            <h1 className="text-5xl sm:text-7xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg mb-2 text-center">
+          <section className="flex flex-col items-center justify-center mt-6 sm:mt-10 mb-6 sm:mb-8">
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg mb-2 text-center px-2">
               ReelVault
             </h1>
-            <p className="text-lg sm:text-2xl text-gray-300 mb-6 max-w-2xl text-center font-light">
+            <p className="text-sm sm:text-lg lg:text-2xl text-gray-300 mb-4 sm:mb-6 max-w-2xl text-center font-light px-3">
               The ultimate AI-powered vault for your favorite Instagram Reels and YouTube Shorts.
             </p>
             <Button
               onClick={() => setShowForm(true)}
-              className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white px-8 py-4 text-lg rounded-full shadow-xl hover:scale-105 transition font-bold mb-2"
+              className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full shadow-xl hover:scale-105 transition font-bold mb-2"
             >
-              <Plus className="mr-2 h-6 w-6" />
+              <Plus className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
               Add New Reel
             </Button>
           </section>
 
           {/* Search and Mood Filter Bar */}
-          <section className="max-w-4xl mx-auto mb-8">
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white/10 backdrop-blur-xl rounded-2xl p-4 shadow-xl border border-white/10 transition-all">
+          <section className="max-w-4xl mx-auto mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-between bg-white/10 backdrop-blur-xl rounded-2xl p-3 sm:p-4 shadow-xl border border-white/10 transition-all">
               <div className="relative w-full sm:w-2/3">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-cyan-400 h-5 w-5" />
+                <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-cyan-400 h-4 w-4 sm:h-5 sm:w-5" />
                 <Input
                   type="text"
                   placeholder="Search reels by description, tags, or notes..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 py-3 text-base bg-transparent border-cyan-400/20 text-white placeholder-cyan-200 rounded-xl focus:ring-2 focus:ring-cyan-400/30 focus:border-cyan-400/50 transition-all"
+                  className="pl-10 sm:pl-12 py-2.5 sm:py-3 text-sm sm:text-base bg-transparent border-cyan-400/20 text-white placeholder-cyan-200 rounded-xl focus:ring-2 focus:ring-cyan-400/30 focus:border-cyan-400/50 transition-all"
                 />
               </div>
               <div className="flex flex-wrap gap-2 justify-center w-full sm:w-1/3">
@@ -177,7 +177,7 @@ const Index = () => {
                   variant={selectedMood === '' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setSelectedMood('')}
-                  className={`rounded-full text-xs px-4 py-2 font-semibold shadow-sm transition-all duration-200
+                  className={`rounded-full text-xs px-3 sm:px-4 py-2 font-semibold shadow-sm transition-all duration-200
                     ${selectedMood === ''
                       ? 'bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white border-0'
                       : 'bg-white/10 border border-cyan-400/20 text-cyan-200 hover:bg-cyan-400/10 hover:text-white backdrop-blur-md'}
@@ -192,7 +192,7 @@ const Index = () => {
                     variant={selectedMood === mood ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setSelectedMood(mood === selectedMood ? '' : mood)}
-                    className={`rounded-full text-xs px-4 py-2 font-semibold shadow-sm transition-all duration-200
+                    className={`rounded-full text-xs px-3 sm:px-4 py-2 font-semibold shadow-sm transition-all duration-200
                       ${selectedMood === mood
                         ? 'bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white border-0'
                         : 'bg-white/10 border border-cyan-400/20 text-cyan-200 hover:bg-cyan-400/10 hover:text-white backdrop-blur-md'}
@@ -207,18 +207,18 @@ const Index = () => {
 
           {/* Stats Bar */}
           {reels.length > 0 && (
-            <section className="max-w-4xl mx-auto mb-8">
-              <div className="flex flex-wrap items-center justify-center gap-6 text-cyan-200 text-base font-medium bg-white/10 backdrop-blur-xl rounded-2xl p-4 shadow-xl border border-white/10 transition-all">
+            <section className="max-w-4xl mx-auto mb-6 sm:mb-8">
+              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-cyan-200 text-sm sm:text-base font-medium bg-white/10 backdrop-blur-xl rounded-2xl p-3 sm:p-4 shadow-xl border border-white/10 transition-all">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5" />
+                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span>{reels.length} Total Reels</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Heart className="h-5 w-5 text-pink-400" />
+                  <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-pink-400" />
                   <span>{reels.filter(r => r.is_liked).length} Liked</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Eye className="h-5 w-5 text-cyan-400" />
+                  <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
                   <span>{reels.reduce((acc, r) => acc + (r.view_count || 0), 0)} Total Views</span>
                 </div>
               </div>
@@ -227,12 +227,12 @@ const Index = () => {
 
           {/* Recently Viewed */}
           {recentlyViewed.length > 0 && !searchTerm && !selectedMood && (
-            <section className="max-w-4xl mx-auto mb-10">
-              <div className="flex items-center gap-2 mb-4">
-                <Clock className="h-5 w-5 text-cyan-400" />
-                <span className="text-cyan-200 font-semibold">Recently Viewed</span>
+            <section className="max-w-4xl mx-auto mb-8 sm:mb-10">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-cyan-400" />
+                <span className="text-cyan-200 font-semibold text-sm sm:text-base">Recently Viewed</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {recentlyViewed.map((reel) => (
                   <ReelCard
                     key={reel.id}
@@ -250,7 +250,7 @@ const Index = () => {
           )}
 
           {/* Reel Cards */}
-          <section className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
+          <section className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-6 sm:mt-8">
             {filteredReels.map((reel) => (
               <ReelCard
                 key={reel.id}

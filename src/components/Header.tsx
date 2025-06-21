@@ -33,15 +33,15 @@ const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-cyan-400/20">
-      <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-3 group">
-            <img src="/logo.png" alt="ReelVault Logo" className="h-10 w-10 rounded-full object-cover shadow-lg group-hover:scale-105 transition-transform" />
-            <span className="text-lg sm:text-2xl font-bold text-white transition-colors group-hover:text-cyan-300">ReelVault</span>
+      <nav className="container mx-auto px-3 sm:px-4 lg:px-8 py-2 sm:py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
+            <img src="/logo.png" alt="ReelVault Logo" className="h-8 w-8 sm:h-10 sm:w-10 rounded-full object-cover shadow-lg group-hover:scale-105 transition-transform" />
+            <span className="text-base sm:text-lg lg:text-2xl font-bold text-white transition-colors group-hover:text-cyan-300">ReelVault</span>
           </Link>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           {user ? (
             <div className="hidden md:flex items-center gap-4">
               <Button onClick={() => setIsFeedbackFormOpen(true)} variant="outline" className="border-cyan-400/50 text-cyan-300 hover:bg-cyan-400/10 hover:text-cyan-200">

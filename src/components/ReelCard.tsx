@@ -125,10 +125,10 @@ const ReelCard: React.FC<ReelCardProps> = ({
         {/* Video Preview */}
         <div className="aspect-video bg-gradient-to-br from-purple-900/40 to-pink-900/40 relative overflow-hidden">
           {/* Top badges row */}
-          <div className="absolute top-4 left-4 z-20 flex gap-2 items-center">
-            <Badge className={`px-3 py-1 text-xs font-bold uppercase tracking-wide shadow-lg border-2 rounded-lg ${reel.is_public ? 'bg-green-600 text-white border-green-700' : 'bg-gray-800 text-gray-100 border-gray-600'}`}>{reel.is_public ? 'Private' : 'Private'}</Badge>
+          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-20 flex gap-1 sm:gap-2 items-center">
+            <Badge className={`px-2 sm:px-3 py-1 text-xs font-bold uppercase tracking-wide shadow-lg border-2 rounded-lg ${reel.is_public ? 'bg-green-600 text-white border-green-700' : 'bg-gray-800 text-gray-100 border-gray-600'}`}>{reel.is_public ? 'Private' : 'Private'}</Badge>
             {reel.mood && (
-              <Badge className="px-3 py-1 text-xs font-bold uppercase tracking-wide shadow-lg border-2 rounded-lg bg-blue-700 text-white border-blue-300 flex items-center gap-1">
+              <Badge className="px-2 sm:px-3 py-1 text-xs font-bold uppercase tracking-wide shadow-lg border-2 rounded-lg bg-blue-700 text-white border-blue-300 flex items-center gap-1">
                 <Brain className="h-3 w-3 mr-1" />
                 {getMoodEmoji(reel.mood)} {reel.mood}
               </Badge>
@@ -150,33 +150,33 @@ const ReelCard: React.FC<ReelCardProps> = ({
           )}
 
           {/* Overlay Controls */}
-          <div className="absolute top-3 right-3 flex gap-2 z-10 items-center">
+          <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex gap-1 sm:gap-2 z-10 items-center">
             {/* Share Button (if public) */}
             {reel.is_public && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => {navigator.clipboard.writeText(window.location.origin + '/public/' + reel.id)}}
-                className="text-cyan-300 hover:text-cyan-400 bg-black/30 hover:bg-cyan-900/20 border-2 border-transparent shadow-md"
+                className="text-cyan-300 hover:text-cyan-400 bg-black/30 hover:bg-cyan-900/20 border-2 border-transparent shadow-md h-8 w-8 sm:h-10 sm:w-10"
                 aria-label="Copy Public Link"
               >
-                <Copy className="h-4 w-4" />
+                <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             )}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => onToggleLike(reel.id)}
-              className={`transition-all duration-200 shadow-md border-2 border-transparent ${reel.is_liked ? 'text-red-400 bg-red-500/20 border-red-400' : 'text-white bg-black/30'} hover:text-red-400 hover:bg-red-500/20 hover:border-red-400 focus:ring-2 focus:ring-red-400`}
+              className={`transition-all duration-200 shadow-md border-2 border-transparent h-8 w-8 sm:h-10 sm:w-10 ${reel.is_liked ? 'text-red-400 bg-red-500/20 border-red-400' : 'text-white bg-black/30'} hover:text-red-400 hover:bg-red-500/20 hover:border-red-400 focus:ring-2 focus:ring-red-400`}
               aria-label="Like"
             >
-              <Heart className={`h-4 w-4 ${reel.is_liked ? 'fill-current' : ''}`} />
+              <Heart className={`h-3 w-3 sm:h-4 sm:w-4 ${reel.is_liked ? 'fill-current' : ''}`} />
             </Button>
           </div>
 
           {/* View Count */}
           {reel.view_count && reel.view_count > 0 && (
-            <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 shadow-md">
+            <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 bg-black/60 backdrop-blur-sm rounded-full px-2 sm:px-3 py-1 flex items-center gap-1 shadow-md">
               <Eye className="h-3 w-3 text-cyan-300" />
               <span className="text-xs text-cyan-200 font-semibold">{reel.view_count}</span>
             </div>
@@ -184,19 +184,19 @@ const ReelCard: React.FC<ReelCardProps> = ({
         </div>
 
         {/* Content */}
-        <div className="p-5 space-y-4 bg-white/10 backdrop-blur-lg rounded-b-2xl">
+        <div className="p-3 sm:p-5 space-y-3 sm:space-y-4 bg-white/10 backdrop-blur-lg rounded-b-2xl">
           {/* Description */}
-          <p className="text-white text-base leading-relaxed font-semibold min-h-[40px]">
+          <p className="text-white text-sm sm:text-base leading-relaxed font-semibold min-h-[40px]">
             {highlightText(reel.description, searchTerm)}
           </p>
 
           {/* Tags */}
           {reel.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {reel.tags.map((tag, index) => (
                 <Badge
                   key={index}
-                  className="flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-600 text-white font-bold text-xs shadow-md border-0"
+                  className="flex items-center gap-1 px-2 sm:px-3 py-1 rounded-full bg-cyan-600 text-white font-bold text-xs shadow-md border-0"
                 >
                   <Tag className="h-3 w-3 mr-1 text-white" />
                   <span className="drop-shadow-sm">{highlightText(tag, searchTerm)}</span>
@@ -207,7 +207,7 @@ const ReelCard: React.FC<ReelCardProps> = ({
 
           {/* Notes Preview */}
           {reel.notes && !showNotes && (
-            <div className="bg-white/10 border border-white/10 rounded-lg p-3">
+            <div className="bg-white/10 border border-white/10 rounded-lg p-2 sm:p-3">
               <p className="text-cyan-100 text-xs line-clamp-2">{reel.notes}</p>
             </div>
           )}
@@ -227,32 +227,32 @@ const ReelCard: React.FC<ReelCardProps> = ({
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-2 pt-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-2">
             <Button
               size="sm"
               onClick={copyToClipboard}
-              className="flex-1 min-w-0 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-md text-xs rounded-full py-1.5 px-4 transition-all duration-200 flex items-center gap-1"
+              className="flex-1 min-w-0 bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-md text-xs rounded-full py-1.5 px-3 sm:px-4 transition-all duration-200 flex items-center gap-1"
               aria-label="Copy Link"
             >
-              <Copy className="h-4 w-4 text-white" />
+              <Copy className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
               <span>Copy</span>
             </Button>
             <Button
               size="sm"
               onClick={() => setShowNotes(!showNotes)}
-              className="flex-1 min-w-0 bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md text-xs rounded-full py-1.5 px-4 transition-all duration-200 flex items-center gap-1"
+              className="flex-1 min-w-0 bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md text-xs rounded-full py-1.5 px-3 sm:px-4 transition-all duration-200 flex items-center gap-1"
               aria-label="Notes"
             >
-              <StickyNote className="h-4 w-4 text-white" />
+              <StickyNote className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
               <span>Notes</span>
             </Button>
             <Button
               size="sm"
               onClick={() => onDelete(reel.id)}
-              className="flex-1 min-w-0 bg-red-600 hover:bg-red-700 text-white font-medium shadow-md text-xs rounded-full py-1.5 px-4 transition-all duration-200 flex items-center gap-1"
+              className="flex-1 min-w-0 bg-red-600 hover:bg-red-700 text-white font-medium shadow-md text-xs rounded-full py-1.5 px-3 sm:px-4 transition-all duration-200 flex items-center gap-1"
               aria-label="Delete"
             >
-              <Trash2 className="h-4 w-4 text-white" />
+              <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
             </Button>
           </div>
 

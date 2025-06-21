@@ -6,10 +6,10 @@ import { Sparkles, ArrowRight, Zap, Star, Users, Clock } from 'lucide-react';
 
 const CallToAction = () => {
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-slate-900/50 to-slate-800/30">
-      <div className="container mx-auto px-4">
+    <section className="py-12 sm:py-16 lg:py-20 xl:py-24 bg-gradient-to-b from-slate-900/50 to-slate-800/30">
+      <div className="container mx-auto px-3 sm:px-4">
         <motion.div 
-          className="relative overflow-hidden bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 rounded-3xl p-8 sm:p-12 lg:p-16 text-center shadow-2xl border border-white/10 backdrop-blur-sm"
+          className="relative overflow-hidden bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 rounded-3xl p-6 sm:p-8 lg:p-12 xl:p-16 text-center shadow-2xl border border-white/10 backdrop-blur-sm"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -46,19 +46,19 @@ const CallToAction = () => {
           <div className="relative z-10">
             {/* Badge */}
             <motion.div
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-cyan-400/30 rounded-full px-4 py-2 text-cyan-300 text-sm font-medium mb-6"
+              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-cyan-400/30 rounded-full px-3 sm:px-4 py-2 text-cyan-300 text-xs sm:text-sm font-medium mb-4 sm:mb-6"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <Sparkles size={16} />
+              <Sparkles size={14} className="sm:w-4 sm:h-4" />
               <span>Join 10,000+ Creators</span>
             </motion.div>
 
             {/* Main Heading */}
             <motion.h2 
-              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-lg mb-6"
+              className="text-2xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white drop-shadow-lg mb-4 sm:mb-6 px-2"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
@@ -72,7 +72,7 @@ const CallToAction = () => {
 
             {/* Description */}
             <motion.p 
-              className="text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed"
+              className="text-sm sm:text-xl text-gray-300 max-w-3xl mx-auto mb-6 sm:mb-8 leading-relaxed px-3"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -83,23 +83,23 @@ const CallToAction = () => {
 
             {/* Benefits Grid */}
             <motion.div 
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-4xl mx-auto"
+              className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10 max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
               viewport={{ once: true }}
             >
-              <div className="flex items-center gap-3 text-cyan-300">
-                <Zap size={20} className="flex-shrink-0" />
-                <span className="text-sm">Setup in 30 seconds</span>
+              <div className="flex items-center gap-2 sm:gap-3 text-cyan-300">
+                <Zap size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="text-xs sm:text-sm">Setup in 30 seconds</span>
               </div>
-              <div className="flex items-center gap-3 text-pink-300">
-                <Users size={20} className="flex-shrink-0" />
-                <span className="text-sm">10K+ happy users</span>
+              <div className="flex items-center gap-2 sm:gap-3 text-pink-300">
+                <Users size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="text-xs sm:text-sm">10K+ happy users</span>
               </div>
-              <div className="flex items-center gap-3 text-purple-300">
-                <Star size={20} className="flex-shrink-0" />
-                <span className="text-sm">Free forever plan</span>
+              <div className="flex items-center gap-2 sm:gap-3 text-purple-300">
+                <Star size={16} className="sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="text-xs sm:text-sm">Free forever plan</span>
               </div>
             </motion.div>
 
@@ -117,11 +117,11 @@ const CallToAction = () => {
                 >
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white px-10 py-6 text-lg rounded-full shadow-2xl hover:shadow-cyan-500/25 transition-all duration-300 font-bold group"
+                    className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white px-6 sm:px-10 py-4 sm:py-6 text-base sm:text-lg rounded-full shadow-2xl hover:shadow-cyan-500/25 transition-all duration-300 font-bold group"
                   >
-                    <Sparkles className="mr-2 h-5 w-5" />
+                    <Sparkles className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                     Start Building Your Vault
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </motion.div>
               </Link>
@@ -129,22 +129,22 @@ const CallToAction = () => {
 
             {/* Trust Indicators */}
             <motion.div 
-              className="mt-8 flex flex-wrap justify-center items-center gap-6 text-gray-400 text-sm"
+              className="mt-6 sm:mt-8 flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-gray-400 text-xs sm:text-sm"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.7 }}
               viewport={{ once: true }}
             >
               <div className="flex items-center gap-1">
-                <Clock size={14} />
+                <Clock size={12} className="sm:w-3.5 sm:h-3.5" />
                 <span>No credit card required</span>
               </div>
               <div className="flex items-center gap-1">
-                <Users size={14} />
+                <Users size={12} className="sm:w-3.5 sm:h-3.5" />
                 <span>Join 10K+ creators</span>
               </div>
               <div className="flex items-center gap-1">
-                <Star size={14} />
+                <Star size={12} className="sm:w-3.5 sm:h-3.5" />
                 <span>4.9/5 rating</span>
               </div>
             </motion.div>
