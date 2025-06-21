@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Menu, LogOut, MessageSquarePlus, User, Home, Info, Sparkles } from 'lucide-react';
+import { Menu, LogOut, MessageSquarePlus, User, Info, Sparkles } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface MobileMenuProps {
-  isLoggedIn: boolean;
-  onSignOut?: () => void;
   onShowFeedbackForm?: () => void;
   onNavigate: (href: string) => void;
 }
@@ -16,7 +15,8 @@ const loggedOutLinks = [
     { name: 'About', href: '#about', icon: User },
 ];
 
-const MobileMenu: React.FC<MobileMenuProps> = ({ isLoggedIn, onSignOut, onShowFeedbackForm, onNavigate }) => {
+const MobileMenu: React.FC<MobileMenuProps> = ({ onShowFeedbackForm, onNavigate }) => {
+  const { user, signOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleNavigation = (href: string) => {
@@ -25,8 +25,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isLoggedIn, onSignOut, onShowFe
   };
 
   const handleSignOut = () => {
-    if (onSignOut) {
-      onSignOut();
+    if (signOut) {
+      signOut();
     }
     setIsOpen(false);
   };
@@ -49,7 +49,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isLoggedIn, onSignOut, onShowFe
         <div className="flex flex-col h-full pt-12">
           <div className="flex-grow">
             <nav className="flex flex-col gap-2">
-            {isLoggedIn ? (
+            {user ? (
                 <Button onClick={handleShowFeedback} variant="ghost" className="w-full justify-start text-lg py-4">
                   <MessageSquarePlus className="mr-3 h-5 w-5" />
                   Share Feedback
@@ -65,7 +65,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isLoggedIn, onSignOut, onShowFe
             </nav>
           </div>
           <div className="mt-auto">
-            {isLoggedIn ? (
+            {user ? (
               <Button onClick={handleSignOut} variant="ghost" className="w-full justify-start text-lg py-4 text-pink-400 hover:text-pink-300">
                 <LogOut className="mr-3 h-5 w-5" />
                 Sign Out
