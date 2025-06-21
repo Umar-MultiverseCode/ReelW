@@ -15,7 +15,9 @@ import HowItWorks from '@/components/HowItWorks';
 import CallToAction from '@/components/CallToAction';
 import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import FeedbackForm from '@/components/FeedbackForm';
+import { useFeedback } from '@/hooks/useFeedback';
+import MobileMenu from '@/components/MobileMenu';
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -31,10 +33,13 @@ const Index = () => {
     deleteReel,
     incrementViewCount,
     updateNotes,
+    suggestTags,
+    detectMood
   } = useReels();
 
   const moods = ['Funny', 'Motivational', 'Educational', 'Calm', 'Emotional', 'Creative', 'Energetic'];
 
+  // Filter reels based on search term and mood
   useEffect(() => {
     let filtered = reels;
 
@@ -81,45 +86,45 @@ const Index = () => {
 
   if (!user) {
     return (
-        <div className="min-h-screen animated-gradient-background">
-          <Header />
-          <main>
-            <div className="relative flex items-center justify-center min-h-[90vh] sm:min-h-screen px-4">
-              <div className="container relative mx-auto">
-                <div className="flex flex-col items-center text-center">
-                  <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
-                    ReelVault
-                  </h1>
-                  <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                    Save, organize, and discover your favorite Instagram Reels and YouTube Shorts with <span className="font-semibold text-cyan-300">AI-powered tagging</span> and <span className="font-semibold text-pink-300">mood detection</span>.
-                  </p>
-                  <Link to="/auth">
-                    <Button size="lg" className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 text-white px-8 sm:px-10 py-4 sm:py-6 text-base sm:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-bold">
-                      ✨ Get Started for Free
-                    </Button>
-                  </Link>
-                </div>
+      <div className="min-h-screen animated-gradient-background">
+        <Header />
+        <main>
+          <div className="relative flex items-center justify-center min-h-[90vh] sm:min-h-screen px-4">
+            <div className="container relative mx-auto">
+              <div className="flex flex-col items-center text-center">
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
+                  ReelVault
+                </h1>
+                <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  Save, organize, and discover your favorite Instagram Reels and YouTube Shorts with <span className="font-semibold text-cyan-300">AI-powered tagging</span> and <span className="font-semibold text-pink-300">mood detection</span>.
+                </p>
+                <Link to="/auth">
+                  <Button size="lg" className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 text-white px-8 sm:px-10 py-4 sm:py-6 text-base sm:text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-bold">
+                    ✨ Get Started for Free
+                  </Button>
+                </Link>
               </div>
             </div>
-  
-            <section id="features">
-              <Features />
-            </section>
-            <section id="how-it-works">
-              <HowItWorks />
-            </section>
-            <section id="testimonials">
-              <Testimonials />
-            </section>
-            <section id="about">
-              <AboutMe />
-            </section>
-  
-            <CallToAction />
-          </main>
-          <Footer />
-        </div>
-      );
+          </div>
+
+          <section id="features">
+            <Features />
+          </section>
+          <section id="how-it-works">
+            <HowItWorks />
+          </section>
+          <section id="testimonials">
+            <Testimonials />
+          </section>
+          <section id="about">
+            <AboutMe />
+          </section>
+
+          <CallToAction />
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
   return (
@@ -127,6 +132,7 @@ const Index = () => {
       <Header />
       <main className="flex-1 pt-28 pb-12">
         <div className="container mx-auto px-4">
+          {/* Hero Section */}
           <section className="flex flex-col items-center justify-center mt-10 mb-8">
             <h1 className="text-5xl sm:text-7xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg mb-2 text-center">
               ReelVault
@@ -143,21 +149,7 @@ const Index = () => {
             </Button>
           </section>
 
-          <Dialog open={showForm} onOpenChange={setShowForm}>
-            <DialogContent className="bg-slate-900 border-cyan-400/20 text-white">
-                <DialogHeader>
-                    <DialogTitle>Add a New Reel</DialogTitle>
-                    <DialogDescription>
-                        Save a new Instagram Reel or YouTube Short to your vault.
-                    </DialogDescription>
-                </DialogHeader>
-                <ReelForm
-                    onSubmit={handleAddReel}
-                    onClose={() => setShowForm(false)}
-                />
-            </DialogContent>
-          </Dialog>
-
+          {/* Search and Mood Filter Bar */}
           <section className="max-w-4xl mx-auto mb-8">
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white/10 backdrop-blur-xl rounded-2xl p-4 shadow-xl border border-white/10 transition-all">
               <div className="relative w-full sm:w-2/3">
@@ -203,16 +195,53 @@ const Index = () => {
             </div>
           </section>
 
-          {reelsLoading && <p className="text-center text-cyan-300">Loading your awesome reels...</p>}
-          {!reelsLoading && filteredReels.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-2xl font-semibold text-gray-300 mb-2">Your Vault is Empty</p>
-              <p className="text-gray-400">Click "Add New Reel" to start saving your favorite content!</p>
-            </div>
+          {/* Stats Bar */}
+          {reels.length > 0 && (
+            <section className="max-w-4xl mx-auto mb-8">
+              <div className="flex flex-wrap items-center justify-center gap-6 text-cyan-200 text-base font-medium bg-white/10 backdrop-blur-xl rounded-2xl p-4 shadow-xl border border-white/10 transition-all">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  <span>{reels.length} Total Reels</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-pink-400" />
+                  <span>{reels.filter(r => r.is_liked).length} Liked</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Eye className="h-5 w-5 text-cyan-400" />
+                  <span>{reels.reduce((acc, r) => acc + (r.view_count || 0), 0)} Total Views</span>
+                </div>
+              </div>
+            </section>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredReels.map(reel => (
+          {/* Recently Viewed */}
+          {recentlyViewed.length > 0 && !searchTerm && !selectedMood && (
+            <section className="max-w-4xl mx-auto mb-10">
+              <div className="flex items-center gap-2 mb-4">
+                <Clock className="h-5 w-5 text-cyan-400" />
+                <span className="text-cyan-200 font-semibold">Recently Viewed</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {recentlyViewed.map((reel) => (
+                  <ReelCard
+                    key={reel.id}
+                    reel={reel}
+                    onToggleLike={toggleLike}
+                    onDelete={deleteReel}
+                    onView={incrementViewCount}
+                    onUpdateNotes={updateNotes}
+                    searchTerm={searchTerm}
+                    className="transition-transform duration-200 hover:scale-[1.03] hover:shadow-2xl rounded-2xl"
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Reel Cards */}
+          <section className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
+            {filteredReels.map((reel) => (
               <ReelCard
                 key={reel.id}
                 reel={reel}
@@ -220,12 +249,22 @@ const Index = () => {
                 onDelete={deleteReel}
                 onView={incrementViewCount}
                 onUpdateNotes={updateNotes}
+                searchTerm={searchTerm}
+                className="transition-transform duration-200 hover:scale-[1.03] hover:shadow-2xl rounded-2xl"
               />
             ))}
-          </div>
-
+          </section>
         </div>
       </main>
+      
+      {showForm && (
+        <ReelForm
+          onClose={() => setShowForm(false)}
+          onSubmit={handleAddReel}
+          suggestTags={suggestTags}
+          detectMood={detectMood}
+        />
+      )}
     </div>
   );
 };
