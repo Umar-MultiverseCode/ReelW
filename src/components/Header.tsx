@@ -1,13 +1,11 @@
-import React from 'react';
-import { Github, Heart, LogOut, User, Film, Sun, Moon, MessageSquarePlus, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Film, LogOut, MessageSquarePlus } from 'lucide-react';
 import { useState } from 'react';
 import FeedbackForm from './FeedbackForm';
 import { useFeedback } from '@/hooks/useFeedback';
 import MobileMenu from './MobileMenu';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const navLinks = [
   { name: 'Features', href: '#features' },
@@ -15,50 +13,18 @@ const navLinks = [
   { name: 'About', href: '#about' },
 ];
 
-const SimpleMobileMenu = () => (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="md:hidden bg-white/10 border-cyan-400/30 text-cyan-300">
-          <Menu className="h-6 w-6" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="right" className="bg-slate-900 border-l-cyan-400/20 text-white w-[250px] sm:w-[300px]">
-        <div className="flex flex-col h-full pt-12">
-            <nav className="flex flex-col gap-4">
-              {navLinks.map(link => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className="text-gray-300 hover:text-cyan-400 transition-colors font-medium text-lg p-2"
-                  >
-                    {link.name}
-                  </a>
-              ))}
-            </nav>
-            <div className="mt-auto">
-                <Link to="/auth">
-                    <Button className="w-full bg-gradient-to-r from-cyan-600 to-pink-600 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-transform py-6 text-lg">
-                      Sign In
-                    </Button>
-                </Link>
-            </div>
-        </div>
-      </SheetContent>
-    </Sheet>
-);
-
 const Header = () => {
   const { user, signOut } = useAuth();
   const [isFeedbackFormOpen, setIsFeedbackFormOpen] = useState(false);
   const { addFeedback } = useFeedback();
+  const navigate = useNavigate();
 
-  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
-    e.preventDefault();
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  const handleNavigate = (href: string) => {
+    if (href.startsWith('#')) {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        navigate(href);
+    }
   };
 
   return (
@@ -84,7 +50,7 @@ const Header = () => {
                   Sign Out
                 </Button>
               </div>
-              <MobileMenu onSignOut={signOut} onShowFeedbackForm={() => setIsFeedbackFormOpen(true)} />
+              <MobileMenu isLoggedIn={true} onSignOut={signOut} onShowFeedbackForm={() => setIsFeedbackFormOpen(true)} onNavigate={handleNavigate} />
               <FeedbackForm
                 isOpen={isFeedbackFormOpen}
                 onClose={() => setIsFeedbackFormOpen(false)}
@@ -92,25 +58,30 @@ const Header = () => {
               />
             </>
           ) : (
-            <nav className="hidden md:flex items-center gap-6">
-              {navLinks.map(link => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleScroll(e, link.href)}
-                  className="text-gray-300 hover:text-cyan-400 transition-colors font-medium"
-                >
-                  {link.name}
-                </a>
-              ))}
-               <Link to="/auth">
-                <Button className="bg-gradient-to-r from-cyan-600 to-pink-600 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform">
-                  Sign In
-                </Button>
-              </Link>
-            </nav>
+            <>
+              <nav className="hidden md:flex items-center gap-6">
+                {navLinks.map(link => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavigate(link.href)
+                    }}
+                    className="text-gray-300 hover:text-cyan-400 transition-colors font-medium"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+                <Link to="/auth">
+                  <Button className="bg-gradient-to-r from-cyan-600 to-pink-600 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform">
+                    Sign In
+                  </Button>
+                </Link>
+              </nav>
+              <MobileMenu isLoggedIn={false} onNavigate={handleNavigate} />
+            </>
           )}
-          <SimpleMobileMenu />
         </div>
       </div>
     </header>

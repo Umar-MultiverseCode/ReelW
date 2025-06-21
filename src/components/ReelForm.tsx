@@ -7,23 +7,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { Switch } from './ui/switch';
+import { DialogFooter } from './ui/dialog';
 
 interface ReelFormProps {
-  onSubmit: (reel: { url: string; description: string; tags: string[]; notes?: string; is_public: boolean }) => void;
-  onCancel: () => void;
-  suggestTags: (description: string) => string[];
-  detectMood: (description: string, tags: string[]) => string;
+  onClose: () => void;
+  onSubmit: (reel: { url: string; description: string; tags: string[]; notes?: string; is_public: boolean }) => Promise<void>;
+  suggestTags: (description: string) => Promise<string[]>;
+  detectMood: (description: string) => Promise<string>;
 }
 
-const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, detectMood }) => {
+const ReelForm: React.FC<ReelFormProps> = ({ onClose, onSubmit, suggestTags, detectMood }) => {
   const [url, setUrl] = useState('');
   const [description, setDescription] = useState('');
-  const [tags, setTags] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
+  const [isPublic, setIsPublic] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [tagInput, setTagInput] = useState('');
   const [suggestedTags, setSuggestedTags] = useState<string[]>([]);
   const [detectedMood, setDetectedMood] = useState<string>('');
-  const [isPublic, setIsPublic] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const validateUrl = (url: string) => {
@@ -40,8 +43,8 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
       const suggestions = suggestTags(newDescription);
       setSuggestedTags(suggestions);
       
-      const currentTags = tags.split(',').map(t => t.trim()).filter(t => t.length > 0);
-      const mood = detectMood(newDescription, currentTags);
+      const currentTags = tags.map(t => t.trim()).filter(t => t.length > 0);
+      const mood = detectMood(newDescription);
       setDetectedMood(mood);
     } else {
       setSuggestedTags([]);
@@ -50,13 +53,13 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
   };
 
   const addSuggestedTag = (tag: string) => {
-    const currentTags = tags.split(',').map(t => t.trim()).filter(t => t.length > 0);
+    const currentTags = tags.map(t => t.trim()).filter(t => t.length > 0);
     if (!currentTags.includes(tag)) {
       const newTags = [...currentTags, tag].join(', ');
       setTags(newTags);
       
       // Update mood with new tags
-      const mood = detectMood(description, [...currentTags, tag]);
+      const mood = detectMood(description);
       setDetectedMood(mood);
     }
   };
@@ -77,10 +80,10 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!url.trim()) {
+    if (!url.trim() || !description.trim()) {
       toast({
-        title: "URL required",
-        description: "Please enter a valid Instagram Reel or YouTube Shorts URL.",
+        title: "URL and description required",
+        description: "Please enter a valid Instagram Reel or YouTube Shorts URL and add a description.",
         variant: "destructive"
       });
       return;
@@ -95,32 +98,10 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
       return;
     }
 
-    if (!description.trim()) {
-      toast({
-        title: "Description required",
-        description: "Please add a description for this reel.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    const tagArray = tags
-      .split(',')
-      .map(tag => tag.trim())
-      .filter(tag => tag.length > 0);
-
-    onSubmit({
-      url: url.trim(),
-      description: description.trim(),
-      tags: tagArray,
-      notes: notes.trim(),
-      is_public: isPublic
-    });
-
-    setIsLoading(false);
+    setIsSubmitting(true);
+    await onSubmit({ url, description, tags, notes, is_public: isPublic });
+    setIsSubmitting(false);
+    onClose();
   };
 
   return (
@@ -133,7 +114,7 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
           <Button
             variant="ghost"
             size="icon"
-            onClick={onCancel}
+            onClick={onClose}
             className="text-gray-400 hover:text-white hover:bg-white/10 rounded-full"
           >
             <X className="h-5 w-5" />
@@ -210,8 +191,8 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
               <Input
                 id="tags"
                 placeholder="cooking, recipe, tutorial (comma separated)"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
+                value={tags.join(', ')}
+                onChange={(e) => setTags(e.target.value.split(', '))}
                 className="bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/20 rounded-xl"
               />
             </div>
@@ -230,32 +211,26 @@ const ReelForm: React.FC<ReelFormProps> = ({ onSubmit, onCancel, suggestTags, de
               />
             </div>
 
-            {/* Public/Private Toggle */}
-            <div className="flex items-center gap-3">
-              <input
-                id="isPublic"
-                type="checkbox"
-                checked={isPublic}
-                onChange={() => setIsPublic((v) => !v)}
-                className="w-5 h-5 accent-cyan-500 rounded focus:ring-2 focus:ring-cyan-400"
-              />
-              <label htmlFor="isPublic" className="text-sm font-medium text-cyan-300 select-none cursor-pointer">
-                Make this reel public
-              </label>
+            <div className="flex items-center space-x-2 mt-6">
+              <Switch id="is-public" checked={isPublic} onCheckedChange={setIsPublic} />
+              <Label htmlFor="is-public" className="text-lg">Make this reel public</Label>
             </div>
+            <p className="text-sm text-gray-400 mt-2">
+              Public reels may be visible to other users on the platform in the future.
+            </p>
 
             {/* Submit Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Button
                 type="submit"
-                disabled={isLoading}
+                disabled={isSubmitting}
                 className="flex-1 bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-700 hover:via-purple-700 hover:to-pink-700 text-white font-medium rounded-xl py-2.5 transition-all duration-200 shadow-lg hover:shadow-xl"
               >
-                {isLoading ? 'Saving...' : '✨ Save Reel'}
+                {isSubmitting ? 'Saving...' : '✨ Save Reel'}
               </Button>
               <Button
                 type="button"
-                onClick={onCancel}
+                onClick={onClose}
                 className="bg-black text-white rounded-xl py-2.5 hover:bg-neutral-900 transition-all duration-200"
               >
                 Cancel

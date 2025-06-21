@@ -137,7 +137,7 @@ export const useReels = () => {
           mood: mood,
           view_count: 0,
           notes: newReel.notes || '',
-          is_public: newReel.is_public ?? false
+          is_public: newReel.is_public
         }])
         .select()
         .single();
