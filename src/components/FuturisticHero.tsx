@@ -19,7 +19,7 @@ const FuturisticHero = () => {
   };
 
   return (
-    <section className="relative min-h-[80vh] sm:min-h-screen flex items-center justify-center overflow-hidden p-0 pt-2 sm:pt-20 lg:pt-24">
+    <section className="relative w-full flex flex-col items-center justify-center pt-24 sm:pt-0">
       <AnimatedBg />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
